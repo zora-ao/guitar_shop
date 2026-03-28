@@ -36,3 +36,11 @@ def create_product():
     db.session.commit()
 
     return jsonify(product.to_dict()), 201
+
+@product_bp.route("/<int:id>", methods=["DELETE"])
+def delete_product(id):
+    product = Product.query.get_or_404(id)
+    db.session.delete(product)
+    db.session.commit()
+
+    return jsonify({"message": "Deleted"})
