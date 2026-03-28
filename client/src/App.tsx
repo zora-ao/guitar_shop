@@ -6,6 +6,8 @@ import AddProducts from "./components/Admin/AddProducts"
 import ProductList from "./components/Admin/ProductList"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
+import Login from "./components/Login"
+import Signup from "./components/Signup"
 
 const App = () => {
   return (
@@ -17,6 +19,8 @@ const App = () => {
           <Route path="add" element={<AddProducts />} />
           <Route path="products" element={<ProductList />} />
         </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </>
   )

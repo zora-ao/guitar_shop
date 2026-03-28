@@ -2,6 +2,8 @@ from flask import Flask, Blueprint, jsonify, request
 from app.models.product import Product
 from app.extentions import db
 import cloudinary.uploader
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from app.models.user import User
 
 product_bp = Blueprint("products", __name__)
 
@@ -11,7 +13,14 @@ def get_products():
     return jsonify([p.to_dict() for p in products])
 
 @product_bp.route('/', methods=['POST'])
+@jwt_required()
 def create_product():
+    user_id = get_jwt_identity()
+    user = User.query.get(user_id)
+
+    if user.role != "admin":
+        return jsonify({"error": "Admin only"}), 403
+
     name = request.form.get("name")
     price = request.form.get("price")
     description = request.form.get("description")
