@@ -20,6 +20,8 @@ def create_app():
     app.config["JWT_COOKIE_SECURE"] = False         # True if using HTTPS in production
     app.config["JWT_ACCESS_COOKIE_PATH"] = "/"      # cookie is valid for whole site
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
+    app.config["JWT_COOKIE_SAMESITE"] = "Lax"
+    app.config["JWT_ACCESS_COOKIE_NAME"] = "access_token_cookie"
 
     jwt.init_app(app)
 

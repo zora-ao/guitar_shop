@@ -2,36 +2,36 @@ import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 
 const Login = () => {
+    const { login } = useAuth();
+
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
 
     const navigate = useNavigate();
 
     const handleLogin = async(e: React.FormEvent) => {
-        e.preventDefault()
-
+        e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login", {
-                email, password
-            },
-            {withCredentials: true}
-        );
+            const res = await axios.post("http://localhost:5000/api/auth/login", 
+                { email, password }, 
+                { withCredentials: true }
+            );
 
-            const user = res.data.user;
+            const userData = res.data.user;
+            login(userData); // <--- THIS UPDATES THE NAVBAR GLOBALLY
 
-            if (user.role == 'admin'){
+            if (userData.role === 'admin') {
                 navigate('/admin');
             } else {
-                navigate('/')
+                navigate('/');
             }
-
             toast.success("Login Success");
-
         } catch (error) {
-            toast.error("Invalid Credentials!")
+            toast.error("Invalid Credentials!");
         }
     }
 
