@@ -14,6 +14,7 @@ import About from "./pages/About"
 import Contact  from "./pages/Contact"
 import AdminLayout from "./components/admin/AdminLayout"
 import AdminAddProducts from "./components/admin/AdminAddProducts"
+import Orders from "./pages/Orders"
 
 const App = () => {
   return (
@@ -28,9 +29,12 @@ const App = () => {
         </Route>
 
         <Route path="/admin" element={<AdminLayout/>}>
+          <Route index element={<AdminAddProducts />} />
           <Route path="add" element={<AdminAddProducts />} />
           <Route path="list" element={<ProductList />} />
         </Route>
+
+        <Route path="/orders" element={<Orders />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

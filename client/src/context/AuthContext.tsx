@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface User {
   email: string;
@@ -8,38 +8,43 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (userData: User) => void;
-  logout: () => void;
-  loading: boolean;
+  isLoading: boolean;
+  logout: () =>  void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
 
-  // Check if user is logged in on refresh
-  const checkAuth = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api/auth/me", { withCredentials: true });
-      setUser(res.data.user);
-    } catch {
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
+  const {data: user, isLoading} = useQuery<User | null>({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      try {
+        const res = await fetch("http://localhost/api/auth/me", {
+          method: 'GET',
+          credentials: 'include'
+        });
+        if (!res.ok) return null;
+
+        const data = await res.json();
+
+        return data.user || data;
+
+      } catch (error) {
+        return null;
+      }
+    },
+    retry: false,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const logout = () => {
+    queryClient.setQueryData(["authUser"], null);
   };
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const login = (userData: User) => setUser(userData);
-  const logout = () => setUser(null);
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user: user ?? null, isLoading, logout }}>
       {children}
     </AuthContext.Provider>
   );

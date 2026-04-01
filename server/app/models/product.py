@@ -8,7 +8,9 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     image_url = db.Column(db.String(255))
     description = db.Column(db.Text)
-    brand = db.Column(db.String(100))
+    category = db.Column(db.String(50))
+    is_best_seller = db.Column(db.Boolean)
+
 
     def to_dict(self):
         return {
@@ -17,6 +19,7 @@ class Product(db.Model):
             "price": self.price,
             "image_url": self.image_url,
             "description": self.description,
-            "brand": self.brand
+            "category": self.category,
+            "is_best_seller": self.is_best_seller
         }
 

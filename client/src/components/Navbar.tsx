@@ -2,20 +2,23 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { Search, ShoppingBag, User } from 'lucide-react';
+import { LogOut, Package, Search, ShoppingBag, User } from 'lucide-react';
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const {user, logout} = useAuth();
   const navigate = useNavigate();
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
-  const handleLogout = async () => {
-    try {
-      await axios.post("http://localhost:5000/api/auth/logout", {}, { withCredentials: true });
-      logout(); // <--- THIS UPDATES THE NAVBAR GLOBALLY
+  const handleUserClick = () => {
+    if (!user) {
       navigate("/login");
-    } catch (err) {
-      console.error("Logout failed", err);
     }
+  };
+
+  const handleLogout = () => {
+    toast.success("Logged out");
+    logout();
   };
 
   return (
@@ -38,7 +41,46 @@ const Navbar = () => {
       {/* Icons */}
       <div className="flex items-center gap-4 text-stone-700">
         <button className="p-2 hover:bg-stone-100 rounded-full"><Search size={20} /></button>
-        <button className="p-2 hover:bg-stone-100 rounded-full"><User size={20} /></button>
+        <div 
+            className="relative"
+            onMouseEnter={() => user && setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
+            <button 
+              onClick={handleUserClick}
+              className="p-2 hover:bg-stone-100 rounded-full transition-colors"
+            >
+              <User size={20} className={user ? "text-black" : "text-stone-400"} />
+            </button>
+
+            {/* Floating Dropdown (Only appears if user is logged in & hovering) */}
+            {user && showDropdown && (
+              <div className="absolute right-0 top-full pt-2 w-48 z-50">
+                <div className="bg-white border border-stone-200 rounded-sm shadow-xl py-2 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="px-4 py-2 border-b border-stone-100 mb-1">
+                    <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Logged in as</p>
+                    <p className="text-xs font-medium text-stone-800 truncate">{user.email}</p>
+                  </div>
+                  
+                  <Link 
+                    to="/orders" 
+                    className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50 transition-colors"
+                  >
+                    <Package size={16} />
+                    My Orders
+                  </Link>
+
+                  <button 
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50 transition-colors mt-1"
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         <button className="p-2 hover:bg-stone-100 rounded-full relative">
           <ShoppingBag size={20} />
         </button>

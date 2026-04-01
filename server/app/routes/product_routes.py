@@ -14,7 +14,7 @@ def get_products():
 
 @product_bp.route('/add_products', methods=['POST'])
 @jwt_required()
-def create_product():
+def add_product():
     user_id = get_jwt_identity()
     user = User.query.get(int(user_id))
 
@@ -25,10 +25,11 @@ def create_product():
     name = request.form.get("name")
     price = request.form.get("price")
     description = request.form.get("description")
-    brand = request.form.get("brand")
+    category = request.form.get("category")
+    is_best_seller = request.form.get("is_best_seller")
     image = request.files.get("image")
 
-    if not all([name, price, description, brand, image]):
+    if not all([name, price, description, category, image]):
         return jsonify({"error": "Missing fields"}), 400
     
     try:
@@ -44,7 +45,8 @@ def create_product():
         price = price,
         image_url = image_url,
         description = description,
-        brand = brand,
+        category = category,
+        is_best_seller = is_best_seller
     )
 
     db.session.add(product)

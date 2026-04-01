@@ -1,8 +1,25 @@
-import { Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import AdminHeader from './AdminHeader';
 import AdminSidebar from './AdminSidebar';
+import { useAuth } from '../../context/AuthContext';
 
 export default function AdminLayout() {
+  const {user, isLoading} = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FDFCFA]">
+        <p className="text-stone-400 animate-pulse">Verifying Admin Access...</p>
+      </div>
+    );
+  };
+
+  if (!user || user.role !== 'admin') {
+    return <Navigate to="/login" replace />;
+  }
+
+
+
   return (
     <div className="min-h-screen bg-[#FDFCFA] flex flex-col">
       <AdminHeader />
