@@ -41,8 +41,8 @@ export default function Signup() {
         <div className="min-h-screen bg-[#FDFCFA] flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white border border-stone-200 p-8 rounded-sm shadow-sm">
             <div className="mb-8 text-center">
-            <h2 className="text-2xl font-semibold text-stone-800">Create Admin Account</h2>
-            <p className="text-stone-500 text-sm mt-2">Join the guitar shop management team</p>
+            <h2 className="text-2xl font-semibold text-stone-800">Create an Account</h2>
+            <p className="text-stone-500 text-sm mt-2">Create an account to access exclusive collections and personalized services.</p>
             </div>
 
             <form onSubmit={handleSignup} className="space-y-4">

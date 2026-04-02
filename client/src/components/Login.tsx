@@ -56,8 +56,8 @@ const Login = () => {
     <div className="min-h-screen bg-[#FDFCFA] flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white border border-stone-200 p-8 rounded-sm shadow-sm">
             <div className="mb-8 text-center">
-            <h2 className="text-2xl font-semibold text-stone-800">Admin Login</h2>
-            <p className="text-stone-500 text-sm mt-2">Enter your credentials to access the dashboard</p>
+            <h2 className="text-2xl font-semibold text-stone-800">Login</h2>
+            <p className="text-stone-500 text-sm mt-2">Enter your details</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -69,7 +69,7 @@ const Login = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full border border-stone-300 rounded-sm px-4 py-3 text-sm focus:border-black outline-none transition"
-                placeholder="admin@guitarshop.com"
+                placeholder="your@email.com"
                 />
             </div>
 
@@ -90,7 +90,7 @@ const Login = () => {
                 disabled={loading}
                 className="w-full bg-black text-white py-3 rounded-sm text-sm font-bold hover:bg-stone-800 transition disabled:bg-stone-400"
             >
-                {loading ? "AUTHENTICATING..." : "LOGIN"}
+                {loading ? "Logging in..." : "LOGIN"}
             </button>
             </form>
 
