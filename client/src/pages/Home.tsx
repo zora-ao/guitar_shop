@@ -3,7 +3,7 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import Navbar from "../components/Navbar";
 import { ProductSection } from "../components/ProductCard";
-import { Products } from "../data/products";
+
 
 
 const Home = () => {
@@ -11,7 +11,7 @@ const Home = () => {
     <div className="min-h-screen bg-[#FDFCFA]">
       <main>
         <Hero />
-        <ProductSection products={Products} />
+        {/* <ProductSection products={Products} /> */}
         <Features />
       </main>
     </div>

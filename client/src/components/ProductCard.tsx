@@ -1,4 +1,5 @@
-import { type Product } from '../data/products';
+import { Link } from 'react-router-dom';
+import { type Product } from './CollectionContent';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface ProductCardProps {
@@ -9,20 +10,43 @@ export function ProductCard({ product }: ProductCardProps) {
   const isBestSeller = product.isBestSeller;
 
   return (
-    <div className={`${isBestSeller ? 'bg-[#EADECA]' : 'bg-[#EFEFEF]'} rounded-xl p-5 flex flex-col justify-between min-h-[350px]`}>
-      <div>
-        <div className="flex justify-between items-start">
+    /* Wrap everything in a Link pointing to the product's unique ID */
+    <Link
+      to={`/product/${product.id}`} 
+      className="block no-underline"
+    >
+      <div className={`group relative ${isBestSeller ? 'bg-[#EADECA]' : 'bg-[#EFEFEF]'} rounded-xl p-6 flex flex-col justify-between min-h-[280px] transition-all duration-300 hover:shadow-lg cursor-pointer`}>
+
+        {/* Top Section: Name and Price */}
+        <div className="flex justify-between items-start z-10">
           <div>
-            <h3 className="font-bold text-lg text-stone-900">{product.name}</h3>
-            {isBestSeller && <p className="text-xs font-semibold text-stone-600">Best seller</p>}
+            <h3 className="font-bold text-[18px] text-stone-900 leading-tight">{product.name}</h3>
+            {isBestSeller && (
+              <span className="inline-block mt-1 bg-black/5 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-stone-600">
+                Best seller
+              </span>
+            )}
           </div>
-          <p className="font-bold text-stone-800 text-sm">{product.price}</p>
+          <p className="text-stone-800 text-sm">${product.price}</p>
+        </div>
+
+        {/* Image Section */}
+        <div className="flex-1 flex items-center justify-center p-0 relative">
+          <img 
+            src={product.image_url} 
+            alt={product.name} 
+            className="max-h-44 w-full object-contain transform transition-transform duration-500 group-hover:scale-110" 
+          />
+        </div>
+
+        {/* Hover Action */}
+        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="bg-black text-white p-2 rounded-full shadow-lg">
+            <ArrowRight size={16} />
+          </div>
         </div>
       </div>
-      <div className="flex-1 flex items-center justify-center p-4">
-        <img src={product.image} alt={product.name} className="max-h-48 object-contain" />
-      </div>
-    </div>
+    </Link>
   );
 }
 

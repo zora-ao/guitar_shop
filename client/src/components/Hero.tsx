@@ -1,3 +1,5 @@
+import hero_img from '../assets/hero_image.png'
+
 export default function Hero() {
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 items-center px-6 md:px-12 py-12 md:py-20 bg-[#FDFCFA] overflow-hidden">
@@ -21,7 +23,7 @@ export default function Hero() {
         {/* Placeholder for your guitar abstract image */}
         <div className="w-full max-w-lg aspect-square bg-stone-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 absolute top-0"></div>
         <img 
-          src="https://images.unsplash.com/photo-1525201548942-d8b8bb66170c?q=80&w=800&auto=format&fit=crop" 
+          src={hero_img}
           alt="Featured Guitar" 
           className="relative z-10 w-full max-w-md object-contain transform rotate-[-15deg]"
         />

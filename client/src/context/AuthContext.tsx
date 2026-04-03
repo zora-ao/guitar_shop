@@ -39,8 +39,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     staleTime: 1000 * 60 * 5,
   });
 
-  const logout = () => {
-    queryClient.setQueryData(["authUser"], null);
+  const logout = async() => {
+    try {
+      await fetch("http://localhost:5000/api/auth/logout", {
+        method: "POST",
+        credentials: 'include'
+      });
+    } catch (error) {
+      console.error("Backend logout failed", error);
+    } finally {
+      queryClient.setQueryData(['authUser'], null);
+      queryClient.clear();
+    }
+
   };
 
   return (

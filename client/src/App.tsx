@@ -15,6 +15,7 @@ import Contact  from "./pages/Contact"
 import AdminLayout from "./components/admin/AdminLayout"
 import AdminAddProducts from "./components/admin/AdminAddProducts"
 import Orders from "./pages/Orders"
+import ProductDetails from "./components/ProductDetails"
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
         </Route>
 
         <Route path="/orders" element={<Orders />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

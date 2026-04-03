@@ -55,7 +55,7 @@ def login():
 def logout():
     resp = jsonify({"message": "Logged out"})
     unset_access_cookies(resp)
-    return resp
+    return resp, 200
 
 @auth_bp.route('/me', methods=["GET"])
 @jwt_required()

@@ -12,6 +12,12 @@ def get_products():
     products = Product.query.all()
     return jsonify([p.to_dict() for p in products])
 
+@product_bp.route('/<int:id>', methods=['GET'])
+def get_product(id):
+    product = Product.query.get_or_404(id)
+    return jsonify(product.to_dict()), 200
+
+
 @product_bp.route('/add_products', methods=['POST'])
 @jwt_required()
 def add_product():
@@ -26,7 +32,7 @@ def add_product():
     price = request.form.get("price")
     description = request.form.get("description")
     category = request.form.get("category")
-    is_best_seller = request.form.get("is_best_seller")
+    is_best_seller = request.form.get("is_best_seller") == 'true'
     image = request.files.get("image")
 
     if not all([name, price, description, category, image]):
