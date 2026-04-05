@@ -16,6 +16,7 @@ import AdminLayout from "./components/admin/AdminLayout"
 import AdminAddProducts from "./components/admin/AdminAddProducts"
 import Orders from "./pages/Orders"
 import ProductDetails from "./components/ProductDetails"
+import { CartProvider } from "./context/CartContext"
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="collection" element={<CollectionPage />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
         </Route>
@@ -36,7 +38,6 @@ const App = () => {
         </Route>
 
         <Route path="/orders" element={<Orders />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

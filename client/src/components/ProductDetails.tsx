@@ -4,31 +4,63 @@ import { type Product } from "./CollectionContent";
 import { useQuery } from "@tanstack/react-query";
 import { CreditCard, ShoppingCart } from "lucide-react";
 import { ProductCard } from "./ProductCard";
+import { useCart } from "../context/CartContext";
+import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 const ProductDetails = () => {
+    const {addToCart} = useCart(); 
+    const {user} = useAuth();
     const { id } = useParams();
-    const [quantity, setQuantity] = useState(0);
+    const [quantity, setQuantity] = useState(1);
+
+    const handleIncrement = () => setQuantity(prev => prev + 1);
+    const handleDecrement = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+
+    const {data: product, isLoading} = useQuery<Product>({
+            queryKey: ['product', id],
+            queryFn: async () => {
+                const res = await fetch(`http://localhost:5000/api/products/${id}`);
+                return res.json();
+            },
+        });
+
+    const {data: relatedProducts = []} = useQuery<Product[]>({
+            queryKey: ['related-products', product?.category],
+            enabled: !!product?.category,
+            queryFn: async () => {
+                const res = await fetch(`http://localhost:5000/api/products?category=${product?.category}&limit=4`);
+                return res.json();
+            }
+        });
+
+
+    const handleAddToCart = async() => {
+        if (!product) return;
+
+        addToCart(product, quantity);
+        if (user) {
+            try {
+                await fetch("http://localhost:5000/api/cart/sync", {
+                    method: 'POST',
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify([{
+                        id: product.id,
+                        quantity: quantity
+                    }]), 
+                    credentials: 'include'
+                });
+                
+            } catch (error) {
+                console.error("Sync Error:", error);
+            }
+        } 
+    };
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [id]);
 
-    const {data: product, isLoading} = useQuery<Product>({
-        queryKey: ['product', id],
-        queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/api/products/${id}`);
-            return res.json();
-        },
-    });
-
-    const {data: relatedProducts = []} = useQuery<Product[]>({
-        queryKey: ['related-products', product?.category],
-        enabled: !!product?.category,
-        queryFn: async () => {
-            const res = await fetch(`http://localhost:5000/api/products?category=${product?.category}&limit=4`);
-            return res.json();
-        }
-    });
 
     if (isLoading) return <div className="p-20 text-center animate-pulse">Loading Instrument...</div>;
     if (!product) return <div className="p-20 text-center">Instrument not found.</div>;
@@ -66,9 +98,32 @@ const ProductDetails = () => {
                 {product.description || "Lorem ipsum dolor sit amet consectetur. Tristique lobortis phasellus viverra pretium tempus dignissim consequat consectetur vitae."}
                 </p>
 
+            <div className="flex flex-col gap-4">
+                <p className="text-[10px] font-bold text-stone-400 uppercase tracking-widest">Select Quantity</p>
+                <div className="flex items-center border border-stone-200 w-fit rounded-sm overflow-hidden bg-white">
+                    <button 
+                    onClick={handleDecrement}
+                    className="px-4 py-2 hover:bg-stone-50 text-stone-600 transition-colors border-r border-stone-200"
+                    >
+                    −
+                    </button>
+                    <span className="px-8 py-2 text-sm font-medium min-w-[60px] text-center">
+                    {quantity}
+                    </span>
+                    <button 
+                    onClick={handleIncrement}
+                    className="px-4 py-2 hover:bg-stone-50 text-stone-600 transition-colors border-l border-stone-200"
+                    >
+                    +
+                    </button>
+                </div>
+            </div>
+
                 {/* Actions */}
                 <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                <button className="flex-1 bg-white border border-black text-black py-4 rounded-sm text-xs font-bold hover:bg-stone-50 transition-colors flex items-center justify-center gap-2">
+                <button 
+                    onClick={handleAddToCart}
+                    className="flex-1 bg-white border border-black text-black py-4 rounded-sm text-xs font-bold hover:bg-stone-50 transition-colors flex items-center justify-center gap-2">
                     <ShoppingCart size={16} />
                     ADD TO CART
                 </button>

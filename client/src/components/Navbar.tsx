@@ -1,11 +1,13 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { LogOut, Package, Search, ShoppingBag, User } from 'lucide-react';
 import { toast } from "react-toastify";
+import { motion} from "framer-motion";
+import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
+  const { cartCount, setCart } = useCart();
   const {user, logout} = useAuth();
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -18,8 +20,17 @@ const Navbar = () => {
 
   const handleLogout = () => {
     toast.success("Logged out");
+    setCart([]);
+    localStorage.removeItem('vibe-cart');
     logout();
   };
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "Collection", path: "/collection" },
+    { name: "About", path: "/about" },
+    { name: "Contact", path: "/contact" },
+  ];
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-[#FDFCFA]">
@@ -31,11 +42,32 @@ const Navbar = () => {
       </div>
 
       {/* Navigation Pills */}
-      <div className="hidden md:flex items-center border border-stone-300 rounded-full px-1 py-1">
-        <Link to="/" className="px-6 py-2 bg-stone-100 rounded-full font-medium text-sm">Home</Link>
-        <Link to="/collection" className="px-6 py-2 hover:bg-stone-50 rounded-full font-medium text-sm">Collection</Link>
-        <Link to="/about" className="px-6 py-2 hover:bg-stone-50 rounded-full font-medium text-sm">About</Link>
-        <Link to="/contact" className="px-6 py-2 hover:bg-stone-50 rounded-full font-medium text-sm">Contact</Link>
+      <div className="hidden md:flex items-center border border-stone-200 rounded-full px-1 py-1 bg-white relative">
+        {navLinks.map((link) => (
+          <NavLink
+            key={link.path}
+            to={link.path}
+            className={({ isActive }) =>
+              `relative px-6 py-2 z-10 font-medium text-sm transition-colors duration-300 ${
+                isActive ? "text-white" : "text-stone-500 hover:text-stone-800"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <>
+                {link.name}
+                {/* This is the magic sliding pill */}
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="absolute inset-0 bg-black rounded-full -z-10"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </>
+            )}
+          </NavLink>
+        ))}
       </div>
 
       {/* Icons */}
@@ -83,6 +115,11 @@ const Navbar = () => {
           </div>
         <button className="p-2 hover:bg-stone-100 rounded-full relative">
           <ShoppingBag size={20} />
+            {cartCount > 0 && (
+              <span className="absolute top-0 right-0 bg-black text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                {cartCount}
+              </span>
+            )}
         </button>
       </div>
     </nav>
