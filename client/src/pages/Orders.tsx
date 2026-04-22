@@ -1,11 +1,11 @@
 import React from 'react'
 
 const Orders = () => {
-    return (
-        <div>
-            <h1>Here are the fucking orders.</h1>
-        </div>
-    )
+  return (
+    <div>
+      
+    </div>
+  )
 }
 
 export default Orders

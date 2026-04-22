@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom"
-import { type Product } from "./CollectionContent";
+import { type Product } from "../types/product";
 import { useQuery } from "@tanstack/react-query";
 import { CreditCard, ShoppingCart } from "lucide-react";
 import { ProductCard } from "./ProductCard";

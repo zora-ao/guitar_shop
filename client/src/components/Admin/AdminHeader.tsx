@@ -10,7 +10,7 @@ export default function AdminHeader() {
     try {
       await logout();
       toast.success("Logged out successfully");
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       toast.error("Logout failed. Please try again.")
     }

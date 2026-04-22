@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { type Product } from "../components/CollectionContent";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import { type Product } from "../types/product";
+import { useAuth } from "./AuthContext";
+import { deleteCartItem, getCart, updateCartItemQuantity } from "../api/cart";
+import { type CartItem } from "../types/cart";
 
-interface CartItem extends Product {
-    quantity: number;
-}
 
 interface CartContextType {
     cart: CartItem[];
@@ -18,44 +18,114 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{children: React.ReactNode}> = ({children}) => {
-    const [cart, setCart] = useState<CartItem[]>(() => {
-        const savedCart = localStorage.getItem('vibe-cart');
-        return savedCart ? JSON.parse(savedCart) : [];
-    });
+    const { user } = useAuth();
+    const [cart, setCart] = useState<CartItem[]>([]);
+
+    const debounceTimer = useRef<{ [key: number]: NodeJS.Timeout }>({});
 
     useEffect(() => {
-        localStorage.setItem('vibe-cart', JSON.stringify(cart));
-    }, [cart]);
+        const fetchDB = async () => {
+            if (user) {
+                try {
+                    const data = await getCart();
+                    setCart(Array.isArray(data) ? data : []);
+                    console.log("Data from API:", data);
+                } catch (error) {
+                    console.error("Failed to fetch cart from DB", error);
+                    setCart([]);
+                }
+            } else {
+                // Fallback to local storage for guests
+                const saved = localStorage.getItem('vibe-cart');
+                if (saved) {
+                    try {
+                        setCart(JSON.parse(saved));
+                    } catch {
+                        setCart([]);
+                    }
+                }
+            }
+        };
+        fetchDB();
+    }, [user]);
+
+    useEffect(() => {
+        if (!user) {
+            localStorage.setItem('vibe-cart', JSON.stringify(cart));
+        }
+    }, [cart, user]);
+
+    
 
     const addToCart = (product: Product, quantity: number) => {
-        setCart((prevCart: CartItem[]): CartItem[] => {
-            const existingItem = prevCart.find((item) => item.id === product.id);
-            if (existingItem) {
-                return prevCart.map((item) => 
-                    item.id === product.id ? {...item, quantity: item.quantity + quantity} : item
-                );
+            setCart((prevCart) => {
+                const existingItem = prevCart.find((item) => item.product.id === product.id);
+                
+                if (existingItem) {
+                    return prevCart.map((item) => 
+                        item.product.id === product.id 
+                            ? { ...item, quantity: item.quantity + quantity } 
+                            : item
+                    );
+                }
+
+                // ✅ Wrap the product inside the 'product' property
+                return [...prevCart, { product, quantity, id: Date.now() }]; 
+            });
+        };
+
+    const removeFromCart = async (productId: number) => {
+        const item = cart.find(i => i.product.id == productId);
+
+        if (user && item){
+            try {
+                await deleteCartItem(item.id);
+            } catch (error) {
+                console.error("Failed to delete item fro db", error);
+                return;
             }
+        }
 
-            return [...prevCart, {...product, quantity}];
-        });
+        setCart((prev) => prev.filter((item) => item.product?.id !== productId));
     };
 
-    const removeFromCart = (productId: number) => {
-        setCart((prev) => prev.filter((item) => item.id !== productId));
-    };
-
-    const updateQuantity = (productId: number, newQty: number) => {
+    const updateQuantity = async (productId: number, newQty: number) => {
         if (newQty < 1) return;
 
-        setCart((prev): CartItem[] => {
-            return prev.map((item) => 
-                item.id === productId ? {...item, quantity: newQty} : item);
-        });
+        const item = cart.find(i => i.product.id == productId);
+        if (!item) return;
+
+        setCart((prev) => 
+            prev.map((item) => 
+                item.product?.id === productId ? {...item, quantity: newQty} : item
+            )
+        );
+
+        if (user){
+            if (debounceTimer.current[productId]){
+                clearTimeout(debounceTimer.current[productId]);
+            }
+
+            debounceTimer.current[productId] = setTimeout(async () => {
+                try {
+                    await updateCartItemQuantity(item.id, newQty);
+                    console.log(`Synced quantity ${newQty} to DB`);
+                } catch (error) {
+                    console.error("Sync failed", error);
+                }
+            }, 500);
+        }
     };
 
 
-    const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-    const cartTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    const cartCount = cart.reduce((total, item) => total + (item?.quantity || 0), 0);
+
+    const cartTotal = cart.reduce((total, item) => {
+        // Safety check: if product doesn't exist, price is 0
+        const price = Number(item.product?.price) || 0;
+        const qty = item.quantity || 0;
+        return total + (price * qty);
+    }, 0);
 
 
     return (

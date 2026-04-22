@@ -113,14 +113,14 @@ const Navbar = () => {
               </div>
             )}
           </div>
-        <button className="p-2 hover:bg-stone-100 rounded-full relative">
+        <Link to='/cart' className="p-2 hover:bg-stone-100 rounded-full relative">
           <ShoppingBag size={20} />
             {cartCount > 0 && (
               <span className="absolute top-0 right-0 bg-black text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
                 {cartCount}
               </span>
             )}
-        </button>
+        </Link>
       </div>
     </nav>
   );

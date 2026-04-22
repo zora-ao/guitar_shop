@@ -1,27 +1,15 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { ProductCard } from './ProductCard';
-
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  image_url: string;
-  category?: string;
-  isBestSeller?: boolean;
-  description: string;
-}
+import { type Product } from '../types/product';
+import { getProducts } from '../api/products';
 
 export default function CollectionContent() {
   const [sortOrder, setSortOrder] = useState('relevant');
 
-  const {data: products = [], isLoading, isError} = useQuery<Product[]>({
+  const {data: products = [], isLoading} = useQuery<Product[]>({
     queryKey: ['products'],
-    queryFn: async() => {
-      const res = await fetch("http://localhost:5000/api/products");
-      if (!res.ok) throw new Error("Failed to fetch products");
-      return res.json();
-    },
+    queryFn: getProducts,
   });
 
   const sortedProducts = [...products].sort((a, b) => {

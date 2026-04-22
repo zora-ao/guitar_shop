@@ -14,9 +14,9 @@ import About from "./pages/About"
 import Contact  from "./pages/Contact"
 import AdminLayout from "./components/admin/AdminLayout"
 import AdminAddProducts from "./components/admin/AdminAddProducts"
-import Orders from "./pages/Orders"
 import ProductDetails from "./components/ProductDetails"
-import { CartProvider } from "./context/CartContext"
+import Cart from "./pages/Cart"
+import Checkout from "./pages/Checkout"
 
 const App = () => {
   return (
@@ -27,6 +27,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="collection" element={<CollectionPage />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="about" element={<About />} />
           <Route path="contact" element={<Contact />} />
         </Route>
@@ -37,7 +39,7 @@ const App = () => {
           <Route path="list" element={<ProductList />} />
         </Route>
 
-        <Route path="/orders" element={<Orders />} />
+        
 
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />

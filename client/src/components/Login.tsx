@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCart } from "../context/CartContext";
-
+import { login } from "../api/auth";
+import { syncCart, getCart } from "../api/cart";
+import { type Product } from "../types/product";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,63 +22,28 @@ const Login = () => {
         setLoading(true);
 
         try {
-            const res = await fetch("http://localhost:5000/api/auth/login", {
-                method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body: JSON.stringify({ email, password }),
-                credentials: 'include'
-            });
 
-            const data = await res.json();
+            const data = await login({email, password});
 
-            if(res.ok){
-                queryClient.setQueryData(["authUser"], data.user || data);
+            queryClient.setQueryData(["authUser"], data.user || data);
 
-                const localCart = JSON.parse(localStorage.getItem('vibe-cart') || '[]');
+            const localCart = JSON.parse(localStorage.getItem('vibe-cart') || '[]');
 
-                if (localCart.length > 0){
-                    try {
-                        const res = await fetch("http://localhost:5000/api/cart/sync", {
-                            method: 'POST',
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(localCart),
-                            credentials: 'include'
-                        });
+            if (localCart.length > 0){
+                await syncCart(localCart);
+                localStorage.removeItem('vibe-cart');
+            }
 
-                        if (res.ok){
-                            localStorage.removeItem('vibe-cart');
-                            const cartRes = await fetch("http://localhost:5000/api/cart/", { 
-                                credentials: 'include' 
-                            });
-                            const dbCart = await cartRes.json();
-                            setCart(dbCart);
-                        };
-                    } catch (error) {
-                        console.error("Failed to sync localstorage", error);
-                    }
-                } else {
-                    const cartRes = await fetch("http://localhost:5000/api/cart/", { 
-                        credentials: 'include' 
-                    });
-                    if (cartRes.ok) {
-                        const dbCart = await cartRes.json();
-                        setCart(dbCart);
-                    }
-                }
+            const dbCart = await getCart();
+            setCart(dbCart);
 
-                const userRole = data.user?.role || data.role;
+            const userRole = data.user?.role;
+            toast.success('Welcome back!');
 
-                if (userRole == 'admin'){
-                    toast.success("Welcome back!");
-                    navigate("/admin/add");
-                } else {
-                    toast.success("Welcome back!");
-                    navigate("/");
-                }
-
-                
+            if (userRole == 'admin'){
+                navigate("/admin/add");
             } else {
-                toast.error(data.error);
+                navigate('/');
             }
 
         } catch (error) {

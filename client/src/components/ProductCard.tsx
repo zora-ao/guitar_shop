@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { type Product } from './CollectionContent';
+import { type Product } from '../types/product';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
 interface ProductCardProps {

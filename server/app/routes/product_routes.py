@@ -7,7 +7,7 @@ from app.models.user import User
 
 product_bp = Blueprint("products", __name__)
 
-@product_bp.route('/', methods=['GET'])
+@product_bp.route("/", methods=["GET"], strict_slashes=False)
 def get_products():
     products = Product.query.all()
     return jsonify([p.to_dict() for p in products])
