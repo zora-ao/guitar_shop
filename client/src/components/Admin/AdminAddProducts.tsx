@@ -9,6 +9,7 @@ export default function AdminAddProducts() {
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [category, setCategory] = useState<string>('Acoustic');
+  const [stock, setStock] = useState<string>('0');
   const [price, setPrice] = useState<string>('');
   const [isBestSeller, setIsBestSeller] = useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -50,6 +51,7 @@ export default function AdminAddProducts() {
     formData.append('name', name);
     formData.append('description', description);
     formData.append('category', category);
+    formData.append('stock', stock);
     formData.append('price', price);
     formData.append('isBestSeller', String(isBestSeller));
     if (image) formData.append('image', image);
@@ -79,6 +81,7 @@ export default function AdminAddProducts() {
     setName('');
     setPrice('');
     setDescription('');
+    setStock('0');
     setImage(null);
     setIsBestSeller(false);
   };
@@ -151,8 +154,9 @@ export default function AdminAddProducts() {
           className="w-full border border-stone-300 rounded-sm px-4 py-2 text-sm focus:border-black"></textarea>
         </div>
 
-        {/* Category & Price Grid */}
-        <div className="grid grid-cols-2 gap-6">
+        {/* Category, Price, & Stock Grid */}
+        <div className="grid grid-cols-3 gap-6">
+          {/* Category */}
           <div>
             <label className="block text-sm font-medium mb-2">Product category</label>
             <div className="relative">
@@ -161,17 +165,27 @@ export default function AdminAddProducts() {
                 className="w-full appearance-none border border-stone-300 px-4 py-2 pr-10 rounded-sm text-sm focus:border-black cursor-pointer">
                 {categories.map(cat => <option key={cat}>{cat}</option>)}
               </select>
-              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-stone-400">
-                <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5"/></svg>
-              </div>
+              {/* ... SVG arrow code ... */}
             </div>
           </div>
+
+          {/* Price */}
           <div>
             <label className="block text-sm font-medium mb-2">Product price</label>
             <input 
-              type="text" 
+              type="number" 
               placeholder="25" 
               value={price} onChange={e => setPrice(e.target.value)}
+              className="w-full border border-stone-300 rounded-sm px-4 py-2 text-sm focus:border-black" />
+          </div>
+
+          {/* Stock */}
+          <div>
+            <label className="block text-sm font-medium mb-2">Product stock</label>
+            <input 
+              type="number" 
+              placeholder="100" 
+              value={stock} onChange={e => setStock(e.target.value)}
               className="w-full border border-stone-300 rounded-sm px-4 py-2 text-sm focus:border-black" />
           </div>
         </div>

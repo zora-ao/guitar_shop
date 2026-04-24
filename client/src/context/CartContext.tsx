@@ -21,7 +21,7 @@ export const CartProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     const { user } = useAuth();
     const [cart, setCart] = useState<CartItem[]>([]);
 
-    const debounceTimer = useRef<{ [key: number]: NodeJS.Timeout }>({});
+    const debounceTimer = useRef<{ [key: number]: any }>({});
 
     useEffect(() => {
         const fetchDB = async () => {
@@ -92,9 +92,6 @@ export const CartProvider: React.FC<{children: React.ReactNode}> = ({children}) 
     const updateQuantity = async (productId: number, newQty: number) => {
         if (newQty < 1) return;
 
-        const item = cart.find(i => i.product.id == productId);
-        if (!item) return;
-
         setCart((prev) => 
             prev.map((item) => 
                 item.product?.id === productId ? {...item, quantity: newQty} : item
@@ -102,14 +99,24 @@ export const CartProvider: React.FC<{children: React.ReactNode}> = ({children}) 
         );
 
         if (user){
+            const currentItem = cart.find(i => i.product.id === productId);
+            if (!currentItem) return;
+
             if (debounceTimer.current[productId]){
                 clearTimeout(debounceTimer.current[productId]);
             }
 
+            const dbItemId = currentItem.id;
+
             debounceTimer.current[productId] = setTimeout(async () => {
                 try {
-                    await updateCartItemQuantity(item.id, newQty);
-                    console.log(`Synced quantity ${newQty} to DB`);
+                    const itemToUpdate = cart.find(i => i.product.id === productId);
+
+                    if (itemToUpdate && itemToUpdate.id){
+                        await updateCartItemQuantity(itemToUpdate.id, newQty);
+                        console.log("Database updated successfully");
+                    }
+
                 } catch (error) {
                     console.error("Sync failed", error);
                 }

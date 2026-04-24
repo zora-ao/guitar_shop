@@ -17,6 +17,7 @@ import AdminAddProducts from "./components/admin/AdminAddProducts"
 import ProductDetails from "./components/ProductDetails"
 import Cart from "./pages/Cart"
 import Checkout from "./pages/Checkout"
+import AdminOrders from "./components/admin/AdminOrders"
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
           <Route index element={<AdminAddProducts />} />
           <Route path="add" element={<AdminAddProducts />} />
           <Route path="list" element={<ProductList />} />
+          <Route path="orders" element={<AdminOrders />} />
         </Route>
 
         

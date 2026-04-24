@@ -10,7 +10,11 @@ cart_bp = Blueprint("cart", __name__)
 @jwt_required()
 def update_cart_item(item_id):
     user_id = get_jwt_identity()
-    data = request.json()
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"error": "No data provided"}), 400
+
     new_quantity = data.get('quantity')
 
     if new_quantity is None or new_quantity < 1:
@@ -25,6 +29,7 @@ def update_cart_item(item_id):
     db.session.commit()
 
     return jsonify({"message": "Quantity updated successfully"}), 200
+
 
 @cart_bp.route("/delete/<int:item_id>", methods=['DELETE'])
 @jwt_required()

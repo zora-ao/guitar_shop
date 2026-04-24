@@ -1,4 +1,5 @@
 from app.extentions import db
+from datetime import datetime, timezone
 
 class Order(db.Model):
     __tablename__ = 'orders'
@@ -21,8 +22,8 @@ class Order(db.Model):
     # Payment & Totals
     subtotal = db.Column(db.Numeric(10, 2), nullable=False)
     shipping_fee = db.Column(db.Numeric(10, 2), default=10.00)
-    total_amount = db.Column(db.Numberic(10, 2), nullable=False)
-    payment_method = db.Column(db.string(50), nullable=False)
+    total_amount = db.Column(db.Numeric(10, 2), nullable=False)
+    payment_method = db.Column(db.String(50), nullable=False)
     
     status = db.Column(db.String(20), default='Pending', index=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
