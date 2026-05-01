@@ -11,8 +11,22 @@ jwt = JWTManager()
 
 def create_app():
     app = Flask(__name__)
-
     app.config.from_object(Config)
+
+    database_url = os.getenv("DATABASE_URL")
+    
+    if database_url:
+        # 1. Fix the dialect (SQLAlchemy requires postgresql://)
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace("postgres://", "postgresql://", 1)
+        
+        # 2. Force SSL (Essential for Supabase cloud connections)
+        if "sslmode" not in database_url:
+            separator = "&" if "?" in database_url else "?"
+            database_url += f"{separator}sslmode=require"
+        
+        # Overwrite the config with the cleaned URL
+        app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 
     is_prod = os.getenv("FLASK_ENV") == "production"
 
