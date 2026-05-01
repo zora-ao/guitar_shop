@@ -4,7 +4,6 @@ from .extensions import db, migrate
 from .config import Config
 from flask_cors import CORS
 import cloudinary
-import cloudinary.uploader
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 
@@ -28,8 +27,10 @@ def create_app():
     CORS(
         app,
         supports_credentials=True,  
-        origins=["http://localhost:5173"]
-    )
+        origins=[
+            "http://localhost:5173",
+            "https://guitar-shop.vercel.app"
+        ])
 
     cloudinary.config(
         cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
