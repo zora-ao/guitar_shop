@@ -14,12 +14,14 @@ def create_app():
 
     app.config.from_object(Config)
 
-    app.config["JWT_SECRET_KEY"] = "super-secret-key"  # change later
+    is_prod = os.getenv("FLASK_ENV") == "production"
+
+    app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY", "super-secret-key")  # change later
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]  # store JWT in cookies
-    app.config["JWT_COOKIE_SECURE"] = False         # True if using HTTPS in production
+    app.config["JWT_COOKIE_SECURE"] = is_prod         # True if using HTTPS in production
     app.config["JWT_ACCESS_COOKIE_PATH"] = "/"      # cookie is valid for whole site
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
-    app.config["JWT_COOKIE_SAMESITE"] = "Lax"
+    app.config["JWT_COOKIE_SAMESITE"] = "None" if is_prod else "Lax"
     app.config["JWT_ACCESS_COOKIE_NAME"] = "access_token_cookie"
 
     jwt.init_app(app)
