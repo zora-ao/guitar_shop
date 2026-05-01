@@ -1,6 +1,6 @@
 import { API_BASE_URL } from "../utils/api";
 
-export const apiFetch = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+export const apiFetch = async <T>(options: RequestInit = {}): Promise<T> => {
 
     const headers: HeadersInit = {
         'Content-Type': 'application/json',
