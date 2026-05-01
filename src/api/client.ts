@@ -1,13 +1,16 @@
 import { API_BASE_URL } from "../utils/api";
 
-export const apiFetch = async <T>(options: RequestInit = {}): Promise<T> => {
+export const apiFetch = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
+    
+    const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+    const url = `${API_BASE_URL}${cleanEndpoint}`;
 
     const headers: HeadersInit = {
         'Content-Type': 'application/json',
         ...options.headers,
     };
 
-    const res = await fetch(API_BASE_URL, {
+    const res = await fetch(url, {
         ...options,
         credentials: options.credentials || 'include',
         headers,
