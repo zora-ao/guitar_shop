@@ -25,7 +25,7 @@ export default function AdminLayout() {
       <AdminHeader />
       
       {/* Sidebar + Content Container */}
-      <div className="flex flex-1 max-w-[1400px] mx-auto w-full">
+      <div className="flex flex-1 max-w-350 mx-auto w-full">
         {/* The Sidebar (fixed width) */}
         <AdminSidebar />
         

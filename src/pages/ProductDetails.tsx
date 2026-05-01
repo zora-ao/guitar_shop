@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { type Product } from "../types/product";
 import { useQuery } from "@tanstack/react-query";
 import { CreditCard, LifeBuoy, ShieldCheck, ShoppingCart, Store, Truck } from "lucide-react";
 import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
-import { useAuth } from "../context/AuthContext";
 import ProductCard from "../components/ui/ProductCard";
 import { Button } from "../components/ui/Button";
+import { API_BASE_URL } from "../utils/api";
 
 const ProductDetails = () => {
     const {addToCart, cart} = useCart(); 
-    const {user} = useAuth();
     const { id } = useParams();
     const [quantity, setQuantity] = useState(1);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -30,7 +29,7 @@ const ProductDetails = () => {
             queryKey: ['related-products', product?.category],
             enabled: !!product?.category,
             queryFn: async () => {
-                const res = await fetch(`http://localhost:5000/api/products?category=${product?.category}&limit=4`);
+                const res = await fetch(`${API_BASE_URL}/api/products?category=${product?.category}&limit=4`);
                 return res.json();
             }
         });

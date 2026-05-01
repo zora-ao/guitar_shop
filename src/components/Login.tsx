@@ -5,7 +5,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCart } from "../context/CartContext";
 import { login } from "../api/auth";
 import { syncCart, getCart } from "../api/cart";
-import { type Product } from "../types/product";
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -15,7 +14,7 @@ const Login = () => {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
-    const {cart, setCart} = useCart();
+    const { setCart} = useCart();
 
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault();

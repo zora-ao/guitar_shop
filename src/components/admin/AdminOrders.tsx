@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Package } from 'lucide-react'; // Optional icon library
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { type Order } from '../../types/checkout';
 import { getAdminOrders, updateOrderStatus } from '../../api/admin';
 
 const AdminOrders: React.FC = () => {

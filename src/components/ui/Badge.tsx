@@ -3,7 +3,7 @@ interface BadgeProps {
     className?: string;
 }
 
-export const Badge: React.FC<BadgeProps> = ({ status, className = '' }) => {
+export const Badge: React.FC<BadgeProps> = ({ status }) => {
     const s = status.toLowerCase();
     
     const dotColor = 

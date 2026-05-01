@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UploadCloud, X } from 'lucide-react';
 import React, { useState, type ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../../utils/api';
 
 export default function AdminAddProducts() {
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ export default function AdminAddProducts() {
 
   const mutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      const res = await fetch("http://localhost:5000/api/products/add_products", {
+      const res = await fetch(`${API_BASE_URL}/api/products/add_products`, {
         method: 'POST',
         body: formData,
         credentials: 'include'
@@ -98,7 +99,7 @@ export default function AdminAddProducts() {
       
       {/* 1. Gallery Section - Fixed 4-Slot Grid */}
       <div className="flex flex-col gap-4 items-center md:w-1/3">
-        <h3 className="text-xl font-medium self-start uppercase tracking-widest text-xs text-stone-500">
+        <h3 className="text-xs font-medium self-start uppercase tracking-widest text-stone-500">
           Product Gallery
         </h3>
         

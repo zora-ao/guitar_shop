@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { API_BASE_URL } from '../utils/api';
 
 export default function Signup() {
     const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export default function Signup() {
         if (password !== confirmPassword) return toast.error("Passwords do not match");
 
         try {
-        const res = await fetch("http://localhost:5000/api/auth/signup", {
+        const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, password, role: 'costumer' }), // Force admin for your dashboard testing

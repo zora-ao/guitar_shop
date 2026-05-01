@@ -3,19 +3,19 @@ import { Edit2, Save, X, XCircle } from 'lucide-react'; // Using Lucide for the 
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Product } from '../../types/product';
+import { API_BASE_URL } from '../../utils/api';
 
 const ProductList: React.FC = () => {
     const queryClient = useQueryClient();
 
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [previewsUrls, setPreviewUrls] = useState<string[]>([]);
     const [newFiles, setNewFiles] = useState<(File | null)[]>(new Array(4).fill(null));
 
     const {data: products = [], isLoading, error} =  useQuery<Product[]>({
         queryKey: ['products'],
         queryFn: async () => {
-            const res = await fetch("http://localhost:5000/api/products");
+            const res = await fetch(`${API_BASE_URL}/api/products`);
             if (!res.ok) throw new Error("Failed to fetch products");
             return res.json();
         }
@@ -23,7 +23,7 @@ const ProductList: React.FC = () => {
 
     const deleteMutation = useMutation({
         mutationFn: async (id:number) => {
-            const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/products/${id}`, {
                 method: 'DELETE',
                 credentials: 'include'
             });
@@ -64,7 +64,7 @@ const ProductList: React.FC = () => {
             });
 
 
-            const res = await fetch(`http://localhost:5000/api/products/${updatedProduct.id}`, {
+            const res = await fetch(`${API_BASE_URL}/api/products/${updatedProduct.id}`, {
                 method: 'PUT',
                 body: formData,
                 credentials: 'include'
@@ -82,7 +82,6 @@ const ProductList: React.FC = () => {
             queryClient.invalidateQueries({ queryKey: ['products'] });
             toast.success("Product updated successfully!");
             setEditingProduct(null);
-            setSelectedImage(null);
         },
         onError: (err: any) => toast.error(err.message)
     });

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import type { Product, ShopContextType } from "../types/product";
 import { useQuery } from "@tanstack/react-query";
+import { API_BASE_URL } from "../utils/api";
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
@@ -11,7 +12,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const {data: products = [], isLoading, isError} = useQuery<Product[]>({
         queryKey: ['products'],
         queryFn: async() => {
-            const res = await fetch("http://localhost:5000/api/products");
+            const res = await fetch(`${API_BASE_URL}/api/products`);
             if (!res.ok) throw new Error("Network response was not ok");
             return res.json();
         }, 

@@ -1,8 +1,5 @@
 import { Route, Routes } from "react-router-dom"
 import Home from "./pages/Home"
-import Products from "./pages/Collection"
-import Admin from "./pages/Admin"
-import AddProducts from "./components/admin/AdminAddProducts"
 import ProductList from "./components/admin/ProductList"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css";
