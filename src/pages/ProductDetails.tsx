@@ -19,7 +19,7 @@ const ProductDetails = () => {
     const {data: product, isLoading} = useQuery<Product>({
             queryKey: ['product', id],
             queryFn: async () => {
-                const res = await fetch(`http://localhost:5000/api/products/${id}`);
+                const res = await fetch(`${API_BASE_URL}/api/products/${id}`);
                 return res.json();
             },
         });
