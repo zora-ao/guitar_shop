@@ -30,7 +30,7 @@ def create_app():
         app,
         supports_credentials=True,  
         origins=[
-            "https://guitar-shop-o6xfvq3zp-zora-aos-projects.vercel.app/",
+            "https://guitar-shop-rho-teal.vercel.app",
         ])
 
     cloudinary.config(
