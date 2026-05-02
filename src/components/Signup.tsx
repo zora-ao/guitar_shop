@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { API_BASE_URL } from '../utils/api';
-import { Eye, EyeOff, Lock, Mail, UserPlus } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 
 export default function Signup() {
     const [email, setEmail] = useState('');

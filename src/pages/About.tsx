@@ -1,4 +1,3 @@
-import React from 'react';
 import { Music, ShieldCheck, Truck, Sparkles } from 'lucide-react';
 
 const About = () => {

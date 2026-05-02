@@ -1,6 +1,5 @@
 import React, { createContext, useContext } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { API_BASE_URL } from "../utils/api";
 import { getCurrentUser, logoutUser } from "../api/auth";
 import type { AuthContextType, User } from "../types/auth";
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useShop } from '../../context/ShopContext';
-import { ChevronDown, Filter, X } from 'lucide-react'; // Assuming you use lucide for consistency
+import { ChevronDown, Filter } from 'lucide-react'; // Assuming you use lucide for consistency
 
 export default function FilterSidebar() {
   const { selectedCategories, toggleCategory } = useShop();
