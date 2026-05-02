@@ -13,7 +13,7 @@ export const AllProviders = ({ children }: { children: React.ReactNode }) => {
             <ShopProvider>
             <CartProvider>
                 <BrowserRouter>
-                {children}
+                    {children}
                 </BrowserRouter>
             </CartProvider>
             </ShopProvider>

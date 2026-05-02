@@ -20,6 +20,7 @@ export const apiFetch = async <T>(endpoint: string, options: RequestInit = {}): 
         throw new Error(errorData.message || 'Network response was not ok');
     }
 
+    if (res.status === 204) return {} as T;
 
     return res.json();
 

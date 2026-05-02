@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UploadCloud, X } from 'lucide-react';
 import React, { useState, type ChangeEvent } from 'react';
 import { toast } from 'react-toastify';
-import { API_BASE_URL } from '../../utils/api';
+import { addProduct } from '../../api/admin';
 
 export default function AdminAddProducts() {
   const queryClient = useQueryClient();
@@ -20,21 +20,7 @@ export default function AdminAddProducts() {
   const categories = ["Acoustic", "Electric", "Acoustic-Electric"];
 
   const mutation = useMutation({
-    mutationFn: async (formData: FormData) => {
-      const res = await fetch(`${API_BASE_URL}/api/products/add_products`, {
-        method: 'POST',
-        body: formData,
-        credentials: 'include'
-      });
-
-      if (!res.ok){
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Failed to add product");
-      }
-
-      return res.json();
-
-    }, 
+    mutationFn: addProduct, 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
 

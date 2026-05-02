@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Edit2, Save, X, XCircle } from 'lucide-react'; // Using Lucide for the delete icon
+import { Edit2, Save, Trash2, X, XCircle } from 'lucide-react'; // Using Lucide for the delete icon
 import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Product } from '../../types/product';
-import { API_BASE_URL } from '../../utils/api';
+import { deleteProduct, getAdminProducts, updateProduct } from '../../api/admin';
 
 const ProductList: React.FC = () => {
     const queryClient = useQueryClient();
@@ -14,28 +14,11 @@ const ProductList: React.FC = () => {
 
     const {data: products = [], isLoading, error} =  useQuery<Product[]>({
         queryKey: ['products'],
-        queryFn: async () => {
-            const res = await fetch(`${API_BASE_URL}/api/products`);
-            if (!res.ok) throw new Error("Failed to fetch products");
-            return res.json();
-        }
+        queryFn: getAdminProducts
     });
 
     const deleteMutation = useMutation({
-        mutationFn: async (id:number) => {
-            const res = await fetch(`${API_BASE_URL}/api/products/${id}`, {
-                method: 'DELETE',
-                credentials: 'include'
-            });
-
-            if (!res.ok){
-                const errorData = await res.json();
-                throw new Error(errorData.error || "Failed to delete product");
-            };
-
-            return res.json();
-        },
-
+        mutationFn: deleteProduct,
         onSuccess: () => {
             queryClient.invalidateQueries({queryKey: ['products']});
             toast.success("Product deleted from the list.");
@@ -47,33 +30,7 @@ const ProductList: React.FC = () => {
     });
 
     const updateMutation = useMutation({
-        mutationFn: async(updatedProduct: Product) => {
-            
-            const formData = new FormData();
-            formData.append('name', updatedProduct.name);
-            formData.append('price', String(updatedProduct.price));
-            formData.append('stock', String(updatedProduct.stock));
-            formData.append('category', updatedProduct.category);
-            formData.append('description', updatedProduct.description || "");
-            formData.append('is_best_seller', String(updatedProduct.isBestSeller));
-
-            formData.append('existing_images', JSON.stringify(previewsUrls.filter(url => url.startsWith('http'))));
-
-            newFiles.forEach((file) => {
-                if (file) formData.append('images', file);
-            });
-
-
-            const res = await fetch(`${API_BASE_URL}/api/products/${updatedProduct.id}`, {
-                method: 'PUT',
-                body: formData,
-                credentials: 'include'
-            });
-
-            if (!res.ok) throw new Error("Failed to update product");
-            return res.json();
-
-        },
+        mutationFn: ({ id, data }: { id: number; data: FormData }) => updateProduct(id, data),
         onSuccess: () => {
             previewsUrls.forEach(url => {
                 if (url.startsWith('blob:')) URL.revokeObjectURL(url);
@@ -94,7 +51,25 @@ const ProductList: React.FC = () => {
 
     const handleSaveEdit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (editingProduct) updateMutation.mutate(editingProduct);
+        if (!editingProduct) return;
+
+        const formData = new FormData();
+        formData.append('name', editingProduct.name);
+        formData.append('price', String(editingProduct.price));
+        formData.append('stock', String(editingProduct.stock));
+        formData.append('category', editingProduct.category);
+        formData.append('description', editingProduct.description || "");
+        formData.append('is_best_seller', String(editingProduct.isBestSeller));
+        
+        // Filter existing vs new images
+        const existingImages = previewsUrls.filter(url => url.startsWith('http'));
+        formData.append('existing_images', JSON.stringify(existingImages));
+
+        newFiles.forEach(file => {
+            if (file) formData.append('images', file);
+        });
+
+        updateMutation.mutate({ id: editingProduct.id, data: formData });
     };
 
     useEffect(() => {
@@ -155,7 +130,7 @@ const ProductList: React.FC = () => {
                                     onClick={() => handleDelete(product.id)}
                                     disabled={deleteMutation.isPending}
                                     className="text-stone-400 hover:text-red-500 p-1 transition-colors">
-                                    <X size={20} />
+                                    <Trash2 size={20} />
                                 </button>
                             </div>
                         </div>

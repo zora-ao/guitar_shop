@@ -7,7 +7,7 @@ import { useCart } from "../context/CartContext";
 import { toast } from "react-toastify";
 import ProductCard from "../components/ui/ProductCard";
 import { Button } from "../components/ui/Button";
-import { API_BASE_URL } from "../utils/api";
+import { getProducts, getProductsById } from "../api/products";
 
 const ProductDetails = () => {
     const {addToCart, cart} = useCart(); 
@@ -18,20 +18,16 @@ const ProductDetails = () => {
 
     const {data: product, isLoading} = useQuery<Product>({
             queryKey: ['product', id],
-            queryFn: async () => {
-                const res = await fetch(`${API_BASE_URL}/api/products/${id}`);
-                return res.json();
-            },
+            queryFn: () => getProductsById(id!),
+            enabled: !!id
         });
+
     const [activeImgIndex, setActiveImgIndex] = useState(0);
 
     const {data: relatedProducts = []} = useQuery<Product[]>({
             queryKey: ['related-products', product?.category],
             enabled: !!product?.category,
-            queryFn: async () => {
-                const res = await fetch(`${API_BASE_URL}/api/products?category=${product?.category}&limit=4`);
-                return res.json();
-            }
+            queryFn: () => getProducts(product?.category, 4),
         });
     
     useEffect(() => {

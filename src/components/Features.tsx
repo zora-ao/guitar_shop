@@ -8,7 +8,7 @@ import ProductCard from "./ui/ProductCard";
 const Features = () => {
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ['featured-products'],
-    queryFn: () => getProducts('relevant'),
+    queryFn: () => getProducts('undefined', 2),
   });
 
   if (isLoading) return null;

@@ -1,5 +1,13 @@
 import { apiFetch } from "./client";
 import { type Order } from "../types/checkout";
+import type { Product } from "../types/product";
+
+export const addProduct = async(formData: FormData): Promise<Product> => 
+    apiFetch<Product>('/products/add_products', {
+        method: 'POST',
+        body: formData,
+        credentials: 'include'
+    });
 
 export const getAdminOrders = async(): Promise<Order[]> => 
     apiFetch('/admin/orders', {
@@ -13,4 +21,16 @@ export const updateOrderStatus = async(orderId: number, status: string) =>
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ status })
+    });
+
+export const getAdminProducts = (): Promise<Product[]> =>
+    apiFetch<Product[]>('/products');
+
+export const deleteProduct = (id: number): Promise<{ message: string }> => 
+    apiFetch<{ message: string }>(`/products/${id}`, { method: 'DELETE' });
+
+export const updateProduct = (id: number, formData: FormData): Promise<Product> => 
+    apiFetch<Product>(`/products/${id}`, {
+        method: 'PUT',
+        body: formData,
     });

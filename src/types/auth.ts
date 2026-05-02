@@ -1,8 +1,13 @@
-
 export interface User {
-    id: string;
+    id: number;
     email: string;
-    role: 'admin' | 'user';
+    role: string;
+}
+
+export interface AuthContextType {
+    user: User | null;
+    isLoading: boolean;
+    logout: () =>  void;
 }
 
 export interface LoginResponse {
@@ -10,3 +15,4 @@ export interface LoginResponse {
     token?: string; 
     message?: string;
 }
+
