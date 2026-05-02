@@ -24,3 +24,14 @@ h1, h2, .font-serif {
         @apply w-2.5 h-2.5 rounded-full;
     }
 }
+
+/* Mobile styles for Toastify */
+@media (max-width: 767px) {
+    .Toastify__toast-container {
+        top: 1em !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 90vw !important;
+        bottom: auto !important; /* Disables the bottom-right position */
+    }
+}

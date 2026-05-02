@@ -2,6 +2,14 @@ import { apiFetch } from "./client";
 import { type Order } from "../types/checkout";
 import type { Product } from "../types/product";
 
+export interface AdminStats {
+  totalProducts: number;
+  totalCustomers: number;
+  totalOrders: number;
+  totalRevenue: number;
+  totalSales: number;
+}
+
 export const addProduct = async(formData: FormData): Promise<Product> => 
     apiFetch<Product>('/products/add_products', {
         method: 'POST',
@@ -33,4 +41,9 @@ export const updateProduct = (id: number, formData: FormData): Promise<Product> 
     apiFetch<Product>(`/products/${id}`, {
         method: 'PUT',
         body: formData,
+    });
+
+export const fetchAdminStats = async (): Promise<AdminStats> => 
+    apiFetch<AdminStats>('/stats', {
+        method: 'GET'
     });

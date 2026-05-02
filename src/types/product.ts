@@ -18,4 +18,7 @@ export interface ShopContextType {
     setSearch: (value: string) => void;
     showSearch: boolean;
     setShowSearch: (value: boolean) => void;
+    selectedCategories: string[]; 
+    setSelectedCategories: (categories: string[]) => void;
+    toggleCategory: (value: string) => void;
 }

@@ -8,6 +8,15 @@ const ShopContext = createContext<ShopContextType | undefined>(undefined);
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [search, setSearch] = useState("");
     const [showSearch, setShowSearch] = useState(false);
+    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+    const toggleCategory = (category: string) => {
+        setSelectedCategories(prev => 
+            prev.includes(category) 
+            ? prev.filter(c => c !== category) 
+            : [...prev, category]
+        );
+    };
 
     const {data: products = [], isLoading, isError} = useQuery<Product[]>({
         queryKey: ['products'],
@@ -23,6 +32,9 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSearch,
         showSearch,
         setShowSearch,
+        selectedCategories,
+        setSelectedCategories,
+        toggleCategory
     };
 
     return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

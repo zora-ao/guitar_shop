@@ -72,3 +72,29 @@ def update_order_status(order_id):
     db.session.commit()
 
     return jsonify({"message": f"Order status updated to {new_status}"}), 200
+
+@admin_bp.route('/stats', methods=['GET'])
+@jwt_required()
+def get_admin_stats():
+    # 1. Total Products
+    total_products = Product.query.count()
+    
+    # 2. Total Customers (Filtering for 'customer' role)
+    total_customers = User.query.filter_by(role='customer').count()
+    
+    # 3. Total Orders
+    total_orders = Order.query.count()
+    
+    # 4. Total Revenue & Sales (Assuming an Order has a 'total_price' column)
+    # total_sales would be the count of successful transactions
+    all_orders = Order.query.all()
+    total_revenue = sum(order.total_price for order in all_orders)
+    total_sales = len(all_orders) # or orders with 'completed' status
+
+    return jsonify({
+        "totalProducts": total_products,
+        "totalCustomers": total_customers,
+        "totalOrders": total_orders,
+        "totalRevenue": total_revenue,
+        "totalSales": total_sales
+    }), 200

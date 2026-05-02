@@ -17,11 +17,12 @@ import Checkout from "./pages/Checkout"
 import AdminOrders from "./components/admin/AdminOrders"
 import Orders from "./pages/Orders"
 import OrderSuccess from "./pages/OrderSuccess"
+import AdminDashboard from "./components/admin/AdminDashboard";
 
 const App = () => {
   return (
     <>
-      <ToastContainer position="top-right" />
+      <ToastContainer position="bottom-right" />
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<Home />} />
@@ -43,8 +44,7 @@ const App = () => {
           <Route path="orders" element={<AdminOrders />} />
         </Route>
 
-        
-
+        <Route path="/stats" element={<AdminDashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

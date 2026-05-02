@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import ProductCard from "../components/ui/ProductCard";
 import { Button } from "../components/ui/Button";
 import { getProducts, getProductsById } from "../api/products";
+import LoadingSpinner from "../utils/LoadingSpinner";
 
 const ProductDetails = () => {
     const {addToCart, cart} = useCart(); 
@@ -76,7 +77,7 @@ const ProductDetails = () => {
         }
     };
 
-    if (isLoading) return <div className="p-20 text-center animate-pulse">Loading Instrument...</div>;
+    if (isLoading) return <LoadingSpinner message="Loading instruments..." />
     if (!product) return <div className="p-20 text-center">Instrument not found.</div>;
 
     const gallery = product.images && product.images.length > 0

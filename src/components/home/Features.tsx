@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import type { Product } from "../types/product"
-import { getProducts } from "../api/products"
+import type { Product } from "../../types/product"
+import { getProducts } from "../../api/products"
 import { Link } from "react-router-dom";
-import ProductCard from "./ui/ProductCard";
+import ProductCard from "../ui/ProductCard";
 
 
 const Features = () => {

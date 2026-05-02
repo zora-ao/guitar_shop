@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { OrderItemCard } from "../components/orders/OrderItemCart";
 import { Button } from "../components/ui/Button";
+import LoadingSpinner from "../utils/LoadingSpinner";
 
 const Orders = () => {
     const [page, setPage] = useState(1);
@@ -35,7 +36,7 @@ const Orders = () => {
     const orders = data?.orders || [];
     const totalPages = data?.total_pages || 1;
 
-    if (isLoading && !data) return <div className="p-10 text-center">Loading orders...</div>;
+    if (isLoading && !data) return <LoadingSpinner message="Loading orders..." />
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-12">

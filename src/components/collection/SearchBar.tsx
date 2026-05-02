@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { useShop } from '../context/ShopContext'
 import { useLocation } from 'react-router-dom';
 import { Search, X } from 'lucide-react';
+import { useShop } from '../../context/ShopContext';
 
 const SearchBar = () => {
     const {search, setSearch, showSearch, setShowSearch} = useShop();

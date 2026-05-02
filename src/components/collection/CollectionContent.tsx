@@ -1,36 +1,34 @@
 import { useState } from 'react';
 import ProductCard from '../ui/ProductCard'
 import { useShop } from '../../context/ShopContext';
+import LoadingSpinner from '../../utils/LoadingSpinner';
 
 export default function CollectionContent() {
   const [sortOrder, setSortOrder] = useState('relevant');
-  const { products, search, showSearch, isLoading } = useShop();
+  const { products, search, showSearch, isLoading, selectedCategories } = useShop();
 
-  const searchedProducts = products.filter((item) => {
-    if (!showSearch || search === "") return true;
-    return item.name.toLowerCase().includes(search.toLowerCase());
+  // Filter by both search input and sidebar categories
+  const filteredProducts = products.filter((item) => {
+    // 1. Search Filter
+    const matchesSearch = !showSearch || search === "" || 
+      item.name.toLowerCase().includes(search.toLowerCase());
+
+    // 2. Category Filter (Matches if no categories are selected OR if the item's category is in the list)
+    const matchesCategory = selectedCategories.length === 0 || 
+      selectedCategories.includes(item.category);
+
+    return matchesSearch && matchesCategory;
   });
 
-  const finalDisplayProducts = [...searchedProducts].sort((a, b) => {
+
+  const finalDisplayProducts = [...filteredProducts].sort((a, b) => {
     if (sortOrder === 'low-to-high') return a.price - b.price;
     if (sortOrder === 'high-to-low') return b.price - a.price;
     return 0; // 'relevant' (default order from API)
   });
   
   if (isLoading) {
-  return (
-      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[...Array(8)].map((_, i) => (
-          <div key={i} className="flex flex-col gap-4 animate-pulse">
-            {/* Image box */}
-            <div className="aspect-[4/5] bg-stone-100 rounded-xl" />
-            {/* Text lines */}
-            <div className="h-4 bg-stone-100 rounded w-3/4" />
-            <div className="h-4 bg-stone-100 rounded w-1/4" />
-          </div>
-        ))}
-      </div>
-    );
+    return <LoadingSpinner message="Tuning our instruments..." />;
   }
 
   return (

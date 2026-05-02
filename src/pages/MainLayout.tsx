@@ -1,7 +1,8 @@
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import { Outlet } from "react-router-dom"
-import SearchBar from "../components/SearchBar"
+import SearchBar from "../components/collection/SearchBar"
+
 
 const MainLayout = () => {
     return (
