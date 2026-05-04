@@ -3,33 +3,40 @@ import hero_img from '../../assets/hero_image.png'
 
 export default function Hero() {
   return (
-    <section className="grid grid-cols-1 md:grid-cols-2 items-center px-6 md:px-20 py-12 md:py-0 bg-[#FDFCFA] overflow-hidden">
-      <div className="max-w-md">
-        <h1 className="text-4xl md:text-6xl font-serif font-bold text-stone-900 leading-tight">
-          Find Your Perfect Sound
-        </h1>
-        <p className="text-stone-600 mt-4 text-lg leading-relaxed">
-          Explore high-quality guitars for beginners and pros. From acoustic to electric—everything you need to start your musical journey.
-        </p>
-        <div className="mt-8 flex gap-3">
-          <Link
-            to='/collection' 
-            className="bg-black text-white px-8 py-3 rounded-full text-sm font-semibold hover:bg-stone-800 transition">
-            Shop Now
-          </Link>
-          <button className="border border-stone-400 text-stone-800 px-8 py-3 rounded-full text-sm font-semibold hover:bg-stone-50 transition">
-            Contact
-          </button>
+    <section className="px-6 py-8 md:px-16 md:py-4 bg-white">
+      {/* 
+          Container mimics the "card" feel from Screenshot 2026-05-04 112746.png 
+          but with a strict Black & White / Minimalist theme.
+      */}
+      <div className="max-w-6xl mx-auto bg-[#F6F6F6] rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-2 items-center min-h-[400px] md:min-h-[450px]">
+        
+        {/* Left Content Side */}
+        <div className="p-8 md:p-10">
+          <h1 className="text-3xl md:text-5xl font-black text-black leading-tight uppercase tracking-tighter">
+            Grab Up To <span className="text-red-400">50% Off</span> <br />
+            On Selected Guitars
+          </h1>
+          <p className="text-stone-600 mt-4 text-sm md:text-base font-medium max-w-sm">
+            Premium sound meets minimalist design. Explore our curated collection of professional-grade instruments.
+          </p>
+          
+          <div className="mt-8 flex items-center gap-4">
+            <Link
+              to='/collection' 
+              className="bg-black text-white px-8 py-3 rounded-full text-xs font-bold hover:bg-stone-800 transition uppercase tracking-widest">
+              Buy Now
+            </Link>
+          </div>
         </div>
-      </div>
-      <div className="mt-10 md:mt-0 flex justify-center relative">
-        {/* Placeholder for your guitar abstract image */}
-        <div className="w-full max-w-lg aspect-square bg-stone-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 absolute top-0"></div>
-        <img 
-          src={hero_img}
-          alt="Featured Guitar" 
-          className="relative z-10 w-full max-w-md object-contain transform"
-        />
+
+        {/* Right Image Side */}
+        <div className="relative flex justify-center items-end h-full bg-[#EBEBEB] md:bg-transparent">
+          <img 
+            src={hero_img}
+            alt="Featured Guitar" 
+            className="w-full max-w-[280px] md:max-w-[350px] object-contain drop-shadow-2xl transition-transform hover:scale-105 duration-500"
+          />
+        </div>
       </div>
     </section>
   );

@@ -44,7 +44,6 @@ def create_app():
         app,
         supports_credentials=True,  
         origins=[
-            "https://guitar-shop-rho-teal.vercel.app",
             "http://localhost:5173",
         ])
 

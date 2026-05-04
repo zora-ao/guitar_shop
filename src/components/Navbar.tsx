@@ -47,7 +47,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="flex items-center justify-between px-6 md:px-12 py-4 bg-[#FDFCFA] sticky top-0 z-50 border-b border-stone-100">
+    <nav className="flex items-center justify-between px-6 md:px-12 md:py-0 py-2 bg-[#FDFCFA] sticky top-0 z-50 border-b border-stone-100">
       
       {/* Mobile Menu Icon (Left side on mobile) */}
       <button 
