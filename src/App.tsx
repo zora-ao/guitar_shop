@@ -38,13 +38,14 @@ const App = () => {
         <Route path="/order-success" element={<OrderSuccess />} />
 
         <Route path="/admin" element={<AdminLayout/>}>
-          <Route index element={<AdminAddProducts />} />
+          <Route index element={<AdminDashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="add" element={<AdminAddProducts />} />
           <Route path="list" element={<ProductList />} />
           <Route path="orders" element={<AdminOrders />} />
         </Route>
 
-        <Route path="/stats" element={<AdminDashboard />} />
+        
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>

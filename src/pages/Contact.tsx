@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, MessageSquare, ArrowUpRight } from 'lucide-react';
 import { toast } from 'react-toastify';
 
 const Contact = () => {
@@ -10,127 +10,120 @@ const Contact = () => {
     e.preventDefault();
     setIsSending(true);
     
-    // Simulate a sending process
     setTimeout(() => {
-      toast.success("Message sent! We'll vibrate back to you soon.");
+      toast.success("Message received. We'll be in touch.");
       setFormData({ name: '', email: '', message: '' });
       setIsSending(false);
     }, 1500);
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCFA] text-stone-800 py-12 md:py-24">
-      <div className="max-w-7xl mx-auto px-6">
+    <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
+      <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
         
-        {/* Header Section */}
-        <div className="mb-16 md:mb-24 max-w-2xl">
-          <h1 className="text-5xl font-serif tracking-tighter mb-6">Get in Touch</h1>
-          <p className="text-stone-500 font-light text-lg leading-relaxed">
-            Have questions about a specific instrument or need help with a custom setup? 
-            Our team of specialists is here to help you find your perfect sound.
-          </p>
+        {/* Simplified Header */}
+        <div className="mb-16 border-l-4 border-black pl-8">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-stone-400 mb-2">Contact</p>
+          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
+            Let's Talk <br /> <span className="italic">Tone.</span>
+          </h1>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16 md:gap-24 items-start">
+        <div className="grid lg:grid-cols-12 gap-12 items-stretch">
           
-          {/* Left Column: Contact Information */}
-          <div className="space-y-12">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-1 gap-12">
-              <div className="flex gap-6 items-start">
-                <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center shrink-0">
-                  <Mail className="text-stone-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xs uppercase tracking-widest mb-2">Email Us</h3>
-                  <p className="text-stone-500 font-light text-sm">support@vibestrings.com</p>
-                  <p className="text-stone-500 font-light text-sm">sales@vibestrings.com</p>
-                </div>
+          {/* Left Column: Essential Info (4 Cols) */}
+          <div className="lg:col-span-5 flex flex-col justify-between py-2">
+            <div className="space-y-10">
+              <div className="group cursor-default">
+                <h3 className="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                   <Mail size={12} className="text-stone-400" /> Correspondence
+                </h3>
+                <p className="text-sm font-bold hover:translate-x-1 transition-transform">concierge@auraguitars.com</p>
+                <p className="text-sm font-bold text-stone-400 hover:translate-x-1 transition-transform">sales@auraguitars.com</p>
               </div>
 
-              <div className="flex gap-6 items-start">
-                <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center shrink-0">
-                  <Phone className="text-stone-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xs uppercase tracking-widest mb-2">Call Us</h3>
-                  <p className="text-stone-500 font-light text-sm">+1 (555) 000-VIBE</p>
-                  <p className="text-stone-500 font-light text-sm">Mon - Fri: 9am - 6pm</p>
-                </div>
+              <div className="group cursor-default">
+                <h3 className="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                   <Phone size={12} className="text-stone-400" /> Direct Line
+                </h3>
+                <p className="text-sm font-bold">+1 (888) AURA-TONE</p>
+                <p className="text-xs text-stone-400 uppercase font-bold tracking-tighter">Availability: 09:00 — 18:00 EST</p>
               </div>
 
-              <div className="flex gap-6 items-start">
-                <div className="w-12 h-12 rounded-full bg-stone-100 flex items-center justify-center shrink-0">
-                  <MapPin className="text-stone-600" size={20} />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xs uppercase tracking-widest mb-2">Visit the Studio</h3>
-                  <p className="text-stone-500 font-light text-sm">123 Resonance Way</p>
-                  <p className="text-stone-500 font-light text-sm">Guitar District, NY 10001</p>
-                </div>
+              <div className="group cursor-default">
+                <h3 className="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
+                   <MapPin size={12} className="text-stone-400" /> Head Quarters
+                </h3>
+                <p className="text-sm font-bold">Resonance District, Studio 402</p>
+                <p className="text-sm font-bold text-stone-400">Manhattan, NY 10001</p>
               </div>
             </div>
 
-            {/* Social / Branding Element */}
-            <div className="pt-12 border-t border-stone-200">
-                <div className="flex items-center gap-4 text-stone-400">
-                    <MessageSquare size={20} />
-                    <span className="text-xs font-bold uppercase tracking-widest">Connect on Social</span>
-                </div>
+            <div className="mt-12 pt-8 border-t border-stone-100">
+                <a href="#" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:text-stone-400 transition-colors">
+                    <MessageSquare size={14} /> Instagram <ArrowUpRight size={12} />
+                </a>
             </div>
           </div>
 
-          {/* Right Column: The Contact Form */}
-          <div className="bg-white border border-stone-200 p-8 md:p-12 rounded-2xl shadow-sm">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-stone-500 ml-1">Full Name</label>
-                <input 
-                  type="text" 
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-4 text-sm focus:border-black focus:bg-white outline-none transition-all"
-                  placeholder="John Doe"
-                />
-              </div>
+          {/* Right Column: Compact Form (7 Cols) */}
+          <div className="lg:col-span-7">
+            <div className="bg-stone-50 p-8 md:p-10 rounded-3xl border border-stone-100 shadow-sm relative overflow-hidden">
+              {/* Subtle accent glow */}
+              <div className="absolute -top-24 -right-24 w-48 h-48 bg-stone-200 rounded-full blur-3xl opacity-50"></div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-stone-500 ml-1">Email Address</label>
-                <input 
-                  type="email" 
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-4 text-sm focus:border-black focus:bg-white outline-none transition-all"
-                  placeholder="your@email.com"
-                />
-              </div>
+              <form onSubmit={handleSubmit} className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Name</label>
+                  <input 
+                    type="text" 
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-xs focus:border-black outline-none transition-all placeholder:text-stone-300"
+                    placeholder="Enter your name"
+                  />
+                </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-stone-500 ml-1">Your Message</label>
-                <textarea 
-                  required
-                  rows={5}
-                  value={formData.message}
-                  onChange={(e) => setFormData({...formData, message: e.target.value})}
-                  className="w-full bg-stone-50 border border-stone-200 rounded-xl px-4 py-4 text-sm focus:border-black focus:bg-white outline-none transition-all resize-none"
-                  placeholder="How can we help you find your sound?"
-                />
-              </div>
+                <div className="space-y-1.5">
+                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Email</label>
+                  <input 
+                    type="email" 
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                    className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-xs focus:border-black outline-none transition-all placeholder:text-stone-300"
+                    placeholder="you@aura.com"
+                  />
+                </div>
 
-              <button 
-                type="submit"
-                disabled={isSending}
-                className="w-full bg-black text-white py-4 rounded-xl text-xs font-bold tracking-widest hover:bg-stone-800 transition-all shadow-lg shadow-stone-100 disabled:bg-stone-400 flex items-center justify-center gap-3"
-              >
-                {isSending ? "SENDING..." : (
-                    <>
-                        SEND MESSAGE
-                        <Send size={14} />
-                    </>
-                )}
-              </button>
-            </form>
+                <div className="space-y-1.5 md:col-span-2">
+                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Message</label>
+                  <textarea 
+                    required
+                    rows={4} // Reduced rows to keep height down
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                    className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-xs focus:border-black outline-none transition-all resize-none placeholder:text-stone-300"
+                    placeholder="Tell us about the instrument you're looking for..."
+                  />
+                </div>
+
+                <div className="md:col-span-2 pt-2">
+                  <button 
+                    type="submit"
+                    disabled={isSending}
+                    className="w-full md:w-auto bg-black text-white px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-[0.3em] hover:bg-stone-800 transition-all active:scale-95 disabled:bg-stone-300 flex items-center justify-center gap-3"
+                  >
+                    {isSending ? "SENDING..." : (
+                        <>
+                            Submit Inquiry <Send size={12} />
+                        </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
 
         </div>

@@ -3,12 +3,18 @@ import { type Order } from "../types/checkout";
 import type { Product } from "../types/product";
 
 export interface AdminStats {
-  totalProducts: number;
-  totalCustomers: number;
-  totalOrders: number;
-  totalRevenue: number;
-  totalSales: number;
+    totalProducts: number;
+    totalCustomers: number;
+    totalOrders: number;
+    totalRevenue: number;
+    totalSales: number;
 }
+
+export const fetchAdminStats = async (): Promise<any> => 
+    apiFetch('/admin/dashboard-summary', {
+        method: 'GET',
+        credentials: 'include' 
+    });
 
 export const addProduct = async(formData: FormData): Promise<Product> => 
     apiFetch<Product>('/products/add_products', {
@@ -41,9 +47,4 @@ export const updateProduct = (id: number, formData: FormData): Promise<Product> 
     apiFetch<Product>(`/products/${id}`, {
         method: 'PUT',
         body: formData,
-    });
-
-export const fetchAdminStats = async (): Promise<AdminStats> => 
-    apiFetch<AdminStats>('/stats', {
-        method: 'GET'
     });

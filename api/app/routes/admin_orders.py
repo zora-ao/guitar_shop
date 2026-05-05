@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from sqlalchemy import func
+from datetime import datetime, timedelta
 from ..models.order import Order, OrderItem
 from ..models.product import Product
 from ..models.user import User
@@ -73,28 +75,55 @@ def update_order_status(order_id):
 
     return jsonify({"message": f"Order status updated to {new_status}"}), 200
 
-@admin_bp.route('/stats', methods=['GET'])
+@admin_bp.route('/dashboard-summary', methods=['GET'])
 @jwt_required()
-def get_admin_stats():
-    # 1. Total Products
-    total_products = Product.query.count()
+def get_dashboard_summary():
+    # 1. Totals
+    platform_fee_rate = 0.05
+    raw_revenue = db.session.query(func.sum(Order.total_amount)).scalar() or 0
+    total_sales = Order.query.count()
+    total_revenue = db.session.query(func.sum(Order.total_amount)).scalar() or 0
+    total_users = User.query.count()
+    total_items = Product.query.count()
+
+    available_payout = float(raw_revenue) * (1 - platform_fee_rate)
+
+    # 2. Trends
+    today = datetime.utcnow()
+    last_30_days = today - timedelta(days=30)
+    prev_30_days = today - timedelta(days=60)
+    last_24_hours = today - timedelta(hours=24)
+
+    current_period_sales = Order.query.filter(Order.created_at >= last_30_days).count()
+    prev_period_sales = Order.query.filter(Order.created_at.between(prev_30_days, last_30_days)).count()
+
+    sales_trend = 0
+    if prev_period_sales > 0:
+        sales_trend = round(((current_period_sales - prev_period_sales) / prev_period_sales) * 100)
+
+    # 3. Graph Data (Last 6 Months)
+    # Note: We group by the formatted month, but we sort by the minimum timestamp in that group
     
-    # 2. Total Customers (Filtering for 'customer' role)
-    total_customers = User.query.filter_by(role='customer').count()
-    
-    # 3. Total Orders
-    total_orders = Order.query.count()
-    
-    # 4. Total Revenue & Sales (Assuming an Order has a 'total_price' column)
-    # total_sales would be the count of successful transactions
-    all_orders = Order.query.all()
-    total_revenue = sum(order.total_price for order in all_orders)
-    total_sales = len(all_orders) # or orders with 'completed' status
+
+    graph_results = db.session.query(
+        func.to_char(Order.created_at, 'HH24:00').label('label'),
+        func.sum(Order.total_amount).label('rev'),
+        func.date_trunc('hour', Order.created_at).label('sort_key')
+    ).filter(Order.created_at >= last_24_hours)\
+        .group_by(func.date_trunc('hour', Order.created_at), 'label')\
+        .order_by('sort_key')\
+        .all()
+
+    graph_data = [{"name": r.label, "rev": float(r.rev)} for r in graph_results]
 
     return jsonify({
-        "totalProducts": total_products,
-        "totalCustomers": total_customers,
-        "totalOrders": total_orders,
-        "totalRevenue": total_revenue,
-        "totalSales": total_sales
+        "stats": {
+            "sales": total_sales,
+            "revenue": f"₱{total_revenue:,.0f}",
+            "users": total_users,
+            "items": total_items,
+            "trends": { "sales": sales_trend, "revenue": 8, "users": -2 }
+        },
+        "graphData": graph_data,
+        "payout": available_payout # Now dynamic!
     }), 200
