@@ -6,7 +6,7 @@ export interface Product {
     category: string;
     stock: number;
     image_url: string;
-    isBestSeller?: boolean;
+    is_best_seller?: boolean;
     description: string;
 }
 

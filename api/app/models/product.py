@@ -13,6 +13,8 @@ class Product(db.Model):
     stock = db.Column(db.Integer, default=0, nullable=False)
     images = db.Column(ARRAY(db.String), default=[])
 
+    cart_items = db.relationship('CartItem', back_populates='product', cascade="all, delete-orphan")
+
 
     def to_dict(self):
         return {

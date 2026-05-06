@@ -46,5 +46,5 @@ export const deleteProduct = (id: number): Promise<{ message: string }> =>
 export const updateProduct = (id: number, formData: FormData): Promise<Product> => 
     apiFetch<Product>(`/products/${id}`, {
         method: 'PUT',
-        body: formData,
+        body: formData, 
     });

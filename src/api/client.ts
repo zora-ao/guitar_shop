@@ -1,13 +1,14 @@
 import { getApiUrl } from "../utils/api";
 
 export const apiFetch = async <T>(endpoint: string, options: RequestInit = {}): Promise<T> => {
-    
     const url = getApiUrl(endpoint);
 
-    const headers: HeadersInit = {
-        'Content-Type': 'application/json',
-        ...options.headers,
-    };
+    // 1. Create a dynamic headers object
+    const headers: Record<string, string> = { ...options.headers as Record<string, string> };
+
+    if (!(options.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
 
     const res = await fetch(url, {
         ...options,
@@ -23,5 +24,4 @@ export const apiFetch = async <T>(endpoint: string, options: RequestInit = {}): 
     if (res.status === 204) return {} as T;
 
     return res.json();
-
 };

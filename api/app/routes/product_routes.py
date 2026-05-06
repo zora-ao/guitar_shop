@@ -34,7 +34,7 @@ def add_product():
     description = request.form.get("description")
     category = request.form.get("category")
     stock = request.form.get("stock", 0)
-    is_best_seller = request.form.get("isBestSeller") == 'true'
+    is_best_seller = request.form.get("is_best_seller") == 'true'
     
     uploaded_files = request.files.getlist('images')
     image_urls = []
@@ -101,34 +101,44 @@ def update_product(id):
     
     product = Product.query.get_or_404(id)
 
+    # 1. Update basic fields
     product.name = request.form.get("name", product.name)
     product.description = request.form.get("description", product.description)
     product.category = request.form.get("category", product.category)
-    product.is_best_seller = request.form.get("is_best_seller") == 'true'
+    
+    # Check for the correct key from React (is_best_seller)
+    is_best = request.form.get("is_best_seller")
+    if is_best is not None:
+        product.is_best_seller = (is_best.lower() == 'true')
 
     if "price" in request.form:
         product.price = float(request.form["price"])
     if "stock" in request.form:
         product.stock = int(request.form["stock"])
 
+    # 2. Update Gallery
     try:
-        existing_image_raw = request.form.get('existing_images', '[]')
-        kept_images = json.loads(existing_image_raw)
+        # Parse existing images (the ones kept in the gallery)
+        existing_images_raw = request.form.get('existing_images', '[]')
+        kept_images = json.loads(existing_images_raw)
 
+        # Handle new uploads
         new_files = request.files.getlist("images")
-        new_uploaded_urls = []
-
+        new_urls = []
         for file in new_files:
-            if file:
+            if file and file.filename != '': # Ensure file isn't empty
                 upload_result = cloudinary.uploader.upload(file)
-                new_uploaded_urls.append(upload_result["secure_url"])
+                new_urls.append(upload_result["secure_url"])
         
-        product.images = kept_images + new_uploaded_urls
-
+        # Combine lists
+        product.images = kept_images + new_urls
+        
+        # This is vital for JSON columns!
         flag_modified(product, "images")
 
     except Exception as e:
-        return jsonify({"error": f"Gallery update failed: {str(e)}"}), 500
+        print(f"Update Error: {e}")
+        return jsonify({"error": "Image processing failed"}), 500
     
     db.session.commit()
     return jsonify(product.to_dict()), 200

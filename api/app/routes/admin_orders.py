@@ -43,7 +43,7 @@ def get_all_orders():
             primary_image = None
             if product:
                 if hasattr(product, 'images') and product.images:
-                    primary_image = product.images[0]
+                    primary_image = product.images[0] if product.images else "/placeholder-image.png"
                 else:
                     primary_image = product.image_url
 

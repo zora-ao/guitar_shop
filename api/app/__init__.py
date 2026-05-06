@@ -44,9 +44,10 @@ def create_app():
         app,
         supports_credentials=True,  
         origins=[
-            "https://guitar-shop-rho-teal.vercel.app",
             "http://localhost:5173",
-        ])
+        ],
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+        )
 
     cloudinary.config(
         cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
