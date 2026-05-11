@@ -1,8 +1,11 @@
-import os 
+import os
 
 class Config:
-    SQLALCHEMY_DATABASE_URI= os.getenv(
+    # Use the env var if it exists, otherwise fallback to local
+    SQLALCHEMY_DATABASE_URI = os.getenv(
         "DATABASE_URL",
         "postgresql://postgres:A40o8ccjr@localhost/guitar_shop"
     )
-    SQLALCHEMY_TRACK_MODIFICATION = False
+    
+    # Fixed the plural 'S' here
+    SQLALCHEMY_TRACK_MODIFICATIONS = False

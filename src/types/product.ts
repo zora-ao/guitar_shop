@@ -1,3 +1,12 @@
+export interface Review {
+    id: number;
+    rating: number;
+    comment: string;
+    username: string;
+    user_id: number;
+    created_at: string; // ISO string from Flask
+}
+
 export interface Product {
     id: number;
     name: string;
@@ -8,6 +17,8 @@ export interface Product {
     image_url: string;
     is_best_seller?: boolean;
     description: string;
+    reviews: Review[]; // Nested array from your Product.to_dict()
+    average_rating: number;
 }
 
 export interface ShopContextType {

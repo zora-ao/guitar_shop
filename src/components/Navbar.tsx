@@ -7,6 +7,7 @@ import { AnimatePresence, motion} from "framer-motion";
 import { useCart } from "../context/CartContext";
 import logo from '../assets/logo.png'
 import { useShop } from "../context/ShopContext";
+import { NotificationDropdown } from "./orders/Notifications";
 
 const Navbar = () => {
   const { cartCount, setCart } = useCart();
@@ -96,13 +97,15 @@ const Navbar = () => {
         ))}
       </div>
 
-      {/* Icons (Search, User, Cart) */}
-      <div className="flex items-center gap-1 md:gap-4 text-stone-700">
-        <button 
-          onClick={handleSearchToggle}
-          className="p-2 hover:bg-stone-100 rounded-full">
-          <Search size={20} />
-        </button>
+      {/* Icons (Search, Notification, User, Cart) */}
+        <div className="flex items-center gap-1 md:gap-4 text-stone-700">
+          <button onClick={handleSearchToggle} className="p-2 hover:bg-stone-100 rounded-full">
+            <Search size={20} />
+          </button>
+          
+          {/* ADD THE NOTIFICATION BELL HERE */}
+          {user && <NotificationDropdown />}
+
         
         {/* User Icon - Hidden on very small screens if preferred, or keep as is */}
         <div 

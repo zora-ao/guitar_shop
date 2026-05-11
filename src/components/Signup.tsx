@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { useNavigate, Link } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { API_BASE_URL } from '../utils/api';
-import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import React, { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useNavigate, Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react'
+import { signup } from '../api/auth'
 
 export default function Signup() {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState(''); // New state
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -21,25 +22,17 @@ export default function Signup() {
 
         setLoading(true);
         try {
-            const res = await fetch(`${API_BASE_URL}/api/auth/signup`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password, role: 'customer' }), 
-                credentials: "include",
-            });
+            // 2. Call the service instead of raw fetch
+            const data = await signup({ email, username, password });
 
-            const data = await res.json();
-
-            if (res.ok) {
-                queryClient.setQueryData(["authUser"], data.user || data);
-                toast.success("Account created successfully!");
-                // Directing to home or shop after signup is usually better UX for customers
-                navigate("/");
-            } else {
-                toast.error(data.error || "Signup failed");
-            }
-        } catch (err) {
-            toast.error("Error connecting to server");
+            // 3. Update React Query cache
+            queryClient.setQueryData(["authUser"], data.user || data);
+            
+            toast.success("Account created successfully!");
+            navigate("/");
+        } catch (err: any) {
+            // apiFetch usually throws an error object with a message
+            toast.error(err.message || "Signup failed");
         } finally {
             setLoading(false);
         }
@@ -47,11 +40,9 @@ export default function Signup() {
 
     return (
         <div className="min-h-screen bg-stone-100 flex items-center justify-center p-4 lg:p-2">
-            
-            {/* The Central Card - matching the Login UI */}
             <div className="flex w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden min-h-[400px]">
                 
-                {/* Left Side: Brand Section (Hidden on Mobile) */}
+                {/* Left Side: Brand Section */}
                 <div className="hidden lg:block lg:w-1/2 relative">
                     <img 
                         src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?q=80&w=2070&auto=format&fit=crop" 
@@ -73,6 +64,23 @@ export default function Signup() {
                     </div>
 
                     <form onSubmit={handleSignup} className="space-y-4">
+                        
+                        {/* Username Input - NEW FIELD */}
+                        <div className="space-y-1">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-stone-500 ml-1">Username</label>
+                            <div className="relative">
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-300" size={16} />
+                                <input 
+                                    type="text" 
+                                    required
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    className="w-full bg-stone-50 border border-stone-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:border-black focus:bg-white outline-none transition-all"
+                                    placeholder="jimi_hendrix"
+                                />
+                            </div>
+                        </div>
+
                         {/* Email Input */}
                         <div className="space-y-1">
                             <label className="text-[10px] font-bold uppercase tracking-widest text-stone-500 ml-1">Email Address</label>

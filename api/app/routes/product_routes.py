@@ -20,60 +20,50 @@ def get_product(id):
     return jsonify(product.to_dict()), 200
 
 
-@product_bp.route('/add_products', methods=['POST'])
-@jwt_required()
+@product_bp.route("/add_products", methods=["POST"])
 def add_product():
-    user_id = get_jwt_identity()
-    user = User.query.get(int(user_id))
-
-    if not user or user.role != "admin":
-        return jsonify({"error": "Admin only"}), 403
-
-    name = request.form.get("name")
-    price = request.form.get("price")
-    description = request.form.get("description")
-    category = request.form.get("category")
-    stock = request.form.get("stock", 0)
-    is_best_seller = request.form.get("is_best_seller") == 'true'
-    
-    uploaded_files = request.files.getlist('images')
-    image_urls = []
-
-    if not uploaded_files:
-        image_urls = ["/placeholder-image.png"]
-    else:
-        for file in uploaded_files:
-            try:
-                upload_result = cloudinary.uploader.upload(file)
-                image_urls.append(upload_result['secure_url'])
-            except Exception as e:
-                print(f"Cloudinary Error: {e}")
-
-
-    if not all([name, price, description, category]):
-        return jsonify({"error": "Missing fields"}), 400
-    
     try:
-        price = float(price)
-        stock = int(stock)
-    except ValueError:
-        return jsonify({"error": "Price and Stock must be a number"}), 422
-    
+        # 1. Use request.form for the text fields
+        name = request.form.get("name")
+        price = request.form.get("price")
+        description = request.form.get("description")
+        category = request.form.get("category")
+        stock = request.form.get("stock")
+        is_best_seller = request.form.get("isBestSeller") == "true"
 
-    product = Product(
-        name = name, 
-        price = price,
-        images = image_urls,
-        description = description,
-        category = category,
-        stock = stock,
-        is_best_seller = is_best_seller
-    )
+        # 2. Handle the Images
+        # Note: Your frontend sends multiple files under the key 'images'
+        uploaded_files = request.files.getlist("images")
+        image_filenames = []
 
-    db.session.add(product)
-    db.session.commit()
+        # TEMPORARY LOGIC: In a real app, you'd upload to Cloudinary or S3.
+        # For now, let's just grab the names or save them locally.
+        for file in uploaded_files:
+            if file.filename:
+                filename = secure_filename(file.filename)
+                # Save file code here if needed: file.save(os.path.join(UPLOAD_FOLDER, filename))
+                image_filenames.append(filename) 
 
-    return jsonify(product.to_dict()), 201
+        # 3. Create the product object
+        new_product = Product(
+            name=name,
+            price=float(price),
+            description=description,
+            category=category,
+            stock=int(stock),
+            is_best_seller=is_best_seller,
+            images=image_filenames  # This matches your ARRAY(db.String)
+        )
+
+        db.session.add(new_product)
+        db.session.commit()
+
+        return jsonify({"message": "Product added successfully", "product": new_product.to_dict()}), 201
+
+    except Exception as e:
+        db.session.rollback()
+        print(f"BACKEND ERROR: {str(e)}") # Watch your terminal for this!
+        return jsonify({"error": str(e)}), 500
 
 @product_bp.route("/<int:id>", methods=["DELETE"])
 @jwt_required()

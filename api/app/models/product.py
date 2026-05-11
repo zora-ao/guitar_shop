@@ -14,6 +14,7 @@ class Product(db.Model):
     images = db.Column(ARRAY(db.String), default=[])
 
     cart_items = db.relationship('CartItem', back_populates='product', cascade="all, delete-orphan")
+    reviews = db.relationship('Review', backref='product', lazy=True, cascade="all, delete-orphan")
 
 
     def to_dict(self):
@@ -26,5 +27,12 @@ class Product(db.Model):
             "is_best_seller": self.is_best_seller,
             "stock": self.stock,
             "images": self.images,
+            "reviews": [review.to_dict() for review in self.reviews],
+            "average_rating": self.calculate_average_rating()
         }
+    
+    def calculate_average_rating(self):
+        if not self.reviews:
+            return 0
+        return round(sum(r.rating for r in self.reviews) / len(self.reviews), 1)
 

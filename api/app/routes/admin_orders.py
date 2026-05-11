@@ -2,7 +2,8 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from sqlalchemy import func
 from datetime import datetime, timedelta
-from ..models.order import Order, OrderItem
+from ..models.order import Order
+from ..models.notification import Notification
 from ..models.product import Product
 from ..models.user import User
 from ..extensions import db
@@ -70,7 +71,24 @@ def update_order_status(order_id):
     if not new_status:
         return jsonify({"error": "Status is required"}), 400
     
-    order.status = new_status
+    # Only create a notification if the status actually changed
+    if order.status != new_status:
+        order.status = new_status
+        
+        # Determine the tone based on status
+        is_bad_news = new_status.lower() in ["cancelled", "returned", "refunded"]
+        title = "Order Canceled" if is_bad_news else "Order Update"
+        prefix = "We're sorry," if is_bad_news else "Good news!"
+
+        notification = Notification(
+            user_id=order.user_id,
+            title=title,
+            message=f"{prefix} Your order #{order.id} is now {new_status.lower()}.",
+            notif_type="shipping"
+        )
+        db.session.add(notification)
+        db.session.commit()
+    
     db.session.commit()
 
     return jsonify({"message": f"Order status updated to {new_status}"}), 200

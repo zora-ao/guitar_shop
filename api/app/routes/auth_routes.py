@@ -11,19 +11,27 @@ def signup():
 
     email = data.get("email")
     password = data.get("password")
-    user_exist = User.query.filter_by(email=email).first()
+    username = data.get("username") # Get username from frontend
 
-    if user_exist:
-        return jsonify({"error": "User already exists"}), 400
+    # 1. Check for missing data
+    if not email or not password or not username:
+        return jsonify({"error": "Email, password, and username are required"}), 400
+
+    # 2. Check if Email or Username already exists
+    if User.query.filter_by(email=email).first():
+        return jsonify({"error": "Email already exists"}), 400
     
-    user = User(email=email)
+    if User.query.filter_by(username=username).first():
+        return jsonify({"error": "Username already taken"}), 400
+    
+    # 3. Create the user
+    user = User(email=email, username=username)
     user.set_password(password)
 
     db.session.add(user)
     db.session.commit()
 
-    return jsonify({"message": "User created"}), 201
-
+    return jsonify({"message": "User created successfully"}), 201
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
@@ -43,6 +51,7 @@ def login():
         "user": {
             "id": user.id,
             "email": user.email,
+            "username": user.username,
             "role": user.role
         }
     })
