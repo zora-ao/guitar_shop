@@ -4,8 +4,6 @@ import { getCurrentUser, logoutUser } from "../api/auth";
 import type { AuthContextType, User } from "../types/auth";
 
 
-
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {

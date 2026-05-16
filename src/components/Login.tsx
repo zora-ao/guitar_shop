@@ -31,7 +31,7 @@ const Login = () => {
             const dbCart = await getCart();
             setCart(dbCart);
             toast.success('Welcome back!');
-            navigate(data.user?.role === 'admin' ? "/admin/add" : '/');
+            navigate(data.user?.role === 'admin' ? "/admin/dashboard" : '/');
         } catch (error) {
             toast.error("Login failed");
         } finally {

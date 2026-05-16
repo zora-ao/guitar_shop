@@ -18,11 +18,17 @@ import AdminOrders from "./components/admin/AdminOrders"
 import Orders from "./pages/Orders"
 import OrderSuccess from "./pages/OrderSuccess"
 import AdminDashboard from "./components/admin/AdminDashboard";
+import { ChatWidget } from "./components/ChatWidget";
+import AdminChat from "./components/admin/AdminChat";
+import { useAuth } from "./context/AuthContext";
 
 const App = () => {
+  const { user } = useAuth();
+
   return (
     <>
       <ToastContainer position="bottom-right" />
+      {user?.role === 'customer' && <ChatWidget />}
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<Home />} />
@@ -38,11 +44,11 @@ const App = () => {
         <Route path="/order-success" element={<OrderSuccess />} />
 
         <Route path="/admin" element={<AdminLayout/>}>
-          <Route index element={<AdminDashboard />} />
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="add" element={<AdminAddProducts />} />
           <Route path="list" element={<ProductList />} />
           <Route path="orders" element={<AdminOrders />} />
+          <Route path="messages" element={<AdminChat />} />
         </Route>
 
         

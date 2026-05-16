@@ -90,9 +90,6 @@ def create_app():
     app.register_blueprint(chat_bp, url_prefix="/api/chat")
 
     with app.app_context():
-        # IMPORTANT: Import models here so SQLAlchemy sees them
-        from .models.notification import Notification
-        from .models.messages import Message 
         
         print("Creating database tables...")
         db.create_all() 

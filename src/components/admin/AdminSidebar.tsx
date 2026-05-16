@@ -1,6 +1,7 @@
 import { useState } from 'react'; // 1. Added State
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
+  MessageSquare,
   DiamondPlus, 
   LucideGuitar, 
   Package, 
@@ -14,6 +15,7 @@ import { toast } from 'react-toastify';
 
 const navItems = [
   { name: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={18} /> },
+  { name: 'Messages', path: '/admin/messages', icon: <MessageSquare size={18} /> },
   { name: 'Add items', path: '/admin/add', icon: <DiamondPlus size={18} /> },
   { name: 'Product list', path: '/admin/list', icon: <LucideGuitar size={18} /> },
   { name: 'Orders', path: '/admin/orders', icon: <Package size={18} /> },

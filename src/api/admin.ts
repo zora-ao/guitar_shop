@@ -1,6 +1,7 @@
 import { apiFetch } from "./client";
 import { type Order } from "../types/checkout";
 import type { Product } from "../types/product";
+import type { ChatContact } from "../types/messages";
 
 export interface AdminStats {
     totalProducts: number;
@@ -9,6 +10,12 @@ export interface AdminStats {
     totalRevenue: number;
     totalSales: number;
 }
+
+export const getChatContacts = async (): Promise<ChatContact[]> => 
+    apiFetch<ChatContact[]>('/chat/contacts', {
+        method: 'GET',
+        credentials: 'include'
+    });
 
 export const fetchAdminStats = async (): Promise<any> => 
     apiFetch('/admin/dashboard-summary', {

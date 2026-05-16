@@ -33,7 +33,7 @@ export default function AdminLayout() {
         
         {/* The Main Content Area */}
         <main className="flex-1 flex flex-col border-stone-200 lg:border-l min-w-0">
-          <div className="p-4 md:p-0">
+          <div className="md:p-0">
               <Outlet />
           </div>
         </main>

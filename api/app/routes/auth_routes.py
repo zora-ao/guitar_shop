@@ -5,6 +5,14 @@ from flask_jwt_extended import create_access_token, set_access_cookies, unset_ac
 
 auth_bp = Blueprint("auth", __name__)
 
+@auth_bp.route('/support-info', methods=['GET'])
+def get_support_info():
+    # Find the user with the 'admin' role
+    admin = User.query.filter_by(role='admin').first() 
+    if admin:
+        return jsonify({"id": admin.id, "username": admin.username}), 200
+    return jsonify({"error": "No admin found"}), 404
+
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()

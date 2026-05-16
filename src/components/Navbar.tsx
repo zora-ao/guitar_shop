@@ -48,7 +48,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="flex items-center justify-between px-6 md:px-12 md:py-0 py-2 bg-[#FDFCFA] sticky top-0 z-50 border-b border-stone-100">
+    <nav className="flex items-center justify-between px-6 md:px-12 md:py-0 py-2 bg-[#FDFCFA] sticky top-0 z-40 border-b border-stone-100">
       
       {/* Mobile Menu Icon (Left side on mobile) */}
       <button 
@@ -121,7 +121,7 @@ const Navbar = () => {
               <div className="bg-white border border-stone-200 rounded-sm shadow-xl py-2">
                 <div className="px-4 py-2 border-b border-stone-100 mb-1">
                     <p className="text-[10px] font-bold text-stone-400 uppercase">Logged in as</p>
-                    <p className="text-xs font-medium text-stone-800 truncate">{user.email}</p>
+                    <p className="text-xs font-medium text-stone-800 truncate">{user.username}</p>
                 </div>
                 <Link to="/orders" className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50"><Package size={16} /> My Orders</Link>
                 <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50"><LogOut size={16} /> Logout</button>

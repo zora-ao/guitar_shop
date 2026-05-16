@@ -1,5 +1,5 @@
 // src/utils/api.ts
-export const API_BASE_URL = "http://localhost:5000";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 export const getApiUrl = (endpoint: string) => {
     // If the variable is missing, this will log a clear error in your browser F12 console

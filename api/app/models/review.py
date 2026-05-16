@@ -16,6 +16,6 @@ class Review(db.Model):
             "rating": self.rating,
             "comment": self.comment,
             "user_id": self.user_id,
-            "user_name": self.author.username if self.author else "Anonymous", 
+            "username": self.author.username if self.author else "Guest", 
             "created_at": self.created_at.isoformat()
         }
