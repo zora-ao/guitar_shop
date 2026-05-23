@@ -1,37 +1,31 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Star } from 'lucide-react';
-import { createAvatar } from '@dicebear/core';
-import { lorelei } from '@dicebear/collection';
+import Avatar from 'boring-avatars'; // Import Boring Avatars
 import { type Review } from '../../types/product';
 
 interface ReviewListProps {
     reviews: Review[];
 }
 
-// --- SUB-COMPONENT: This solves the "Hook in Loop" error ---
+// --- SUB-COMPONENT ---
 const ReviewItem = ({ review }: { review: Review }) => {
     const name = review.username || "Guest User";
 
-    // useMemo is now called at the top level of this sub-component
-    const avatar = useMemo(() => {
-    // Generate the SVG string
-    const svg = createAvatar(lorelei, {
-            seed: name,
-            size: 128,
-        }).toString();
-
-        // Convert the SVG string to a Base64 Data URI
-        return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-    }, [name]);
+    const formattedDate = new Date(review.created_at).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
     return (
         <div className="flex gap-6 p-6 bg-white rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-all duration-300">
-            {/* DiceBear Avatar */}
-            <div className="shrink-0">
-                <img 
-                    src={avatar} 
-                    alt={name} 
-                    className="w-14 h-14 rounded-xl border border-stone-100 bg-stone-50"
+            {/* Boring Avatar replaces DiceBear */}
+            <div className="shrink-0 rounded-xl overflow-hidden border border-stone-100 bg-stone-50">
+                <Avatar
+                    size={56} // 56px matches your original w-14 h-14 dimensions
+                    name={name}
+                    variant="beam" // Options: "beam", "marble", "pixel", "sunset", "bauhaus", "ring"
+                    colors={['#1c1917', '#44403c', '#78716c', '#a8a29e', '#d6d3d1']} // Aesthetic stone palette
                 />
             </div>
 
@@ -52,7 +46,7 @@ const ReviewItem = ({ review }: { review: Review }) => {
                         </div>
                     </div>
                     <span className="text-[10px] font-bold text-stone-400 uppercase tracking-widest bg-stone-50 px-2 py-1 rounded border border-stone-100">
-                        {review.created_at}
+                        {formattedDate}
                     </span>
                 </div>
 

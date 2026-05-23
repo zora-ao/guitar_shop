@@ -116,18 +116,37 @@ const Navbar = () => {
           <button onClick={handleUserClick} className="p-2 hover:bg-stone-100 rounded-full">
             <User size={20} className={user ? "text-black" : "text-stone-400"} />
           </button>
-          {user && showDropdown && (
-            <div className="absolute right-0 top-full pt-2 w-48 z-50">
-              <div className="bg-white border border-stone-200 rounded-sm shadow-xl py-2">
-                <div className="px-4 py-2 border-b border-stone-100 mb-1">
-                    <p className="text-[10px] font-bold text-stone-400 uppercase">Logged in as</p>
-                    <p className="text-xs font-medium text-stone-800 truncate">{user.username}</p>
+          <AnimatePresence>
+            {user && showDropdown && (
+              <motion.div 
+                initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                className="absolute right-0 top-full pt-2 w-52 z-50"
+              >
+                <div className="bg-white border border-stone-200 rounded-2xl shadow-xl py-2 overflow-hidden bg-white/95 backdrop-blur-md">
+                  <div className="px-4 py-2.5 border-b border-stone-100 mb-1 bg-stone-50/50">
+                    <p className="text-[9px] font-bold text-stone-400 uppercase tracking-wider">Logged in as</p>
+                    <p className="text-xs font-semibold text-stone-800 truncate mt-0.5">{user.username}</p>
+                  </div>
+                  
+                  <Link 
+                    to="/orders" 
+                    className="flex items-center gap-3 px-4 py-2 text-xs font-medium text-stone-600 hover:bg-stone-50 hover:text-stone-950 transition-colors"
+                  >
+                    <Package size={14} strokeWidth={1.75} /> My Orders
+                  </Link>
+                  
+                  <button 
+                    onClick={handleLogout} 
+                    className="w-full flex items-center gap-3 px-4 py-2 text-xs font-medium text-red-500 hover:bg-red-50/60 transition-colors"
+                  >
+                    <LogOut size={14} strokeWidth={1.75} /> Logout
+                  </button>
                 </div>
-                <Link to="/orders" className="flex items-center gap-3 px-4 py-2 text-sm text-stone-600 hover:bg-stone-50"><Package size={16} /> My Orders</Link>
-                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-500 hover:bg-red-50"><LogOut size={16} /> Logout</button>
-              </div>
-            </div>
-          )}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Cart Icon */}
@@ -142,51 +161,83 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Drawer Overlay */}
+      {/* Mobile Menu Drawer Menu Block */}
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            {/* Backdrop */}
+            {/* Backdrop Layer */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsMenuOpen(false)}
-              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] md:hidden"
+              className="fixed inset-0 bg-stone-950/30 backdrop-blur-sm z-[60] md:hidden"
             />
-            {/* Drawer */}
+            
+            {/* Drawer Sliding Overlay Layout */}
             <motion.div 
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed top-0 left-0 bottom-0 w-[75%] max-w-sm bg-white z-[70] p-6 shadow-2xl md:hidden"
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed top-0 left-0 bottom-0 w-[80%] max-w-xs bg-[#FDFCFA] z-[70] p-6 shadow-2xl border-r border-stone-200 md:hidden flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between mb-8">
-                <span className="font-serif text-xl font-bold">Menu</span>
-                <button onClick={() => setIsMenuOpen(false)}><X size={24} /></button>
+              <div>
+                <div className="flex items-center justify-between mb-8 pb-4 border-b border-stone-100">
+                  <span className="text-xs font-bold uppercase tracking-[0.2em] text-stone-400">Menu</span>
+                  <button 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="p-1 hover:bg-stone-100 rounded-full transition-colors"
+                  >
+                    <X size={20} strokeWidth={1.75} />
+                  </button>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  {navLinks.map((link) => (
+                    <NavLink 
+                      key={link.path} 
+                      to={link.path}
+                      className={({ isActive }) => 
+                        `px-3 py-2.5 text-sm font-semibold uppercase tracking-widest rounded-xl transition-all ${
+                          isActive ? 'bg-stone-900 text-white shadow-sm' : 'text-stone-600 hover:bg-stone-50 hover:text-stone-950'
+                        }`
+                      }
+                    >
+                      {link.name}
+                    </NavLink>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex flex-col gap-6">
-                {navLinks.map((link) => (
-                  <NavLink 
-                    key={link.path} 
-                    to={link.path}
-                    className={({ isActive }) => `text-lg font-medium ${isActive ? 'text-black' : 'text-stone-500'}`}
-                  >
-                    {link.name}
-                  </NavLink>
-                ))}
-                
-                <hr className="border-stone-100" />
-                
-                {/* Mobile specific User links */}
+              {/* Bottom Container Profile Details (Mobile Specific) */}
+              <div className="pt-6 border-t border-stone-100 space-y-3">
                 {user ? (
                   <>
-                    <Link to="/orders" className="flex items-center gap-3 text-stone-600"><Package size={18} /> My Orders</Link>
-                    <button onClick={handleLogout} className="flex items-center gap-3 text-red-500"><LogOut size={18} /> Logout</button>
+                    <div className="px-3 py-1">
+                      <p className="text-[9px] font-bold text-stone-400 uppercase tracking-wider">Account</p>
+                      <p className="text-xs font-bold text-stone-800 truncate">{user.username}</p>
+                    </div>
+                    <Link 
+                      to="/orders" 
+                      className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-50 rounded-xl transition-colors"
+                    >
+                      <Package size={16} strokeWidth={1.75} /> My Orders
+                    </Link>
+                    <button 
+                      onClick={handleLogout} 
+                      className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                    >
+                      <LogOut size={16} strokeWidth={1.75} /> Logout
+                    </button>
                   </>
                 ) : (
-                  <Link to="/login" className="flex items-center gap-3 text-stone-600"><User size={18} /> Login / Register</Link>
+                  <Link 
+                    to="/login" 
+                    className="flex items-center gap-3 px-3 py-3 text-sm font-semibold uppercase tracking-wider text-center justify-center bg-stone-900 text-white rounded-xl shadow-sm transition-colors hover:bg-stone-800"
+                  >
+                    <User size={14} strokeWidth={2} /> Login / Register
+                  </Link>
                 )}
               </div>
             </motion.div>

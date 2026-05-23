@@ -115,7 +115,7 @@ const Login = () => {
                     {/* Brand Overlay */}
                     <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] flex flex-col items-center justify-center text-white p-10 text-center">
                         <div className="w-16 h-[2px] bg-white mb-6" />
-                        <h1 className="text-4xl font-serif tracking-tighter mb-2">VibeStrings</h1>
+                        <h1 className="text-4xl font-serif tracking-tighter mb-2">Guitars</h1>
                         <p className="text-sm font-light tracking-[0.3em] uppercase opacity-80">Premium Gear</p>
                     </div>
                 </div>

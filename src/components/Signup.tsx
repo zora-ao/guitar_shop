@@ -51,7 +51,7 @@ export default function Signup() {
                     />
                     <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex flex-col items-center justify-center text-white p-10 text-center">
                         <div className="w-16 h-[2px] bg-white mb-6" />
-                        <h1 className="text-4xl font-serif tracking-tighter mb-2">Join VibeStrings</h1>
+                        <h1 className="text-4xl font-serif tracking-tighter mb-2">Join Guitars</h1>
                         <p className="text-sm font-light tracking-[0.3em] uppercase opacity-80">Start your musical journey</p>
                     </div>
                 </div>

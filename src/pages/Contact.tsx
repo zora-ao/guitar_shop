@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, MessageSquare, ArrowUpRight } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { Mail, MapPin, Clock, Send } from 'lucide-react';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
   const [isSending, setIsSending] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -11,119 +11,173 @@ const Contact = () => {
     setIsSending(true);
     
     setTimeout(() => {
-      toast.success("Message received. We'll be in touch.");
-      setFormData({ name: '', email: '', message: '' });
+      toast.success("Message received.");
+      setFormData({ name: '', email: '', subject: '', message: '' });
       setIsSending(false);
     }, 1500);
   };
 
   return (
-    <div className="min-h-screen bg-white text-black font-sans selection:bg-black selection:text-white">
-      <div className="max-w-6xl mx-auto px-6 py-16 md:py-24">
+    <div className="min-h-screen bg-[#FDFCFA] text-stone-900 font-sans selection:bg-stone-900 selection:text-white flex justify-center items-center">
+      <div className="w-full max-w-5xl px-6 md:px-16 py-16 md:py-10 space-y-12">
         
-        {/* Simplified Header */}
-        <div className="mb-16 border-l-4 border-black pl-8">
-          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-stone-400 mb-2">Contact</p>
-          <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none">
-            Let's Talk <br /> <span className="italic">Tone.</span>
+        {/* Header Section - Enhanced contrast and solid weight */}
+        <div className="max-w-4xl mx-auto pl-2">
+          <h1 className="text-3xl md:text-5xl font-normal uppercase tracking-[0.2em] text-stone-950">
+            Contact
           </h1>
+          <p className="text-xs font-bold text-stone-500 tracking-[0.2em] uppercase mt-3">
+            Aura Guitars Atelier
+          </p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-12 items-stretch">
+        {/* Main Content Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 max-w-4xl mx-auto items-stretch">
           
-          {/* Left Column: Essential Info (4 Cols) */}
-          <div className="lg:col-span-5 flex flex-col justify-between py-2">
-            <div className="space-y-10">
-              <div className="group cursor-default">
-                <h3 className="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                   <Mail size={12} className="text-stone-400" /> Correspondence
-                </h3>
-                <p className="text-sm font-bold hover:translate-x-1 transition-transform">concierge@auraguitars.com</p>
-                <p className="text-sm font-bold text-stone-400 hover:translate-x-1 transition-transform">sales@auraguitars.com</p>
-              </div>
-
-              <div className="group cursor-default">
-                <h3 className="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                   <Phone size={12} className="text-stone-400" /> Direct Line
-                </h3>
-                <p className="text-sm font-bold">+1 (888) AURA-TONE</p>
-                <p className="text-xs text-stone-400 uppercase font-bold tracking-tighter">Availability: 09:00 — 18:00 EST</p>
-              </div>
-
-              <div className="group cursor-default">
-                <h3 className="text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2">
-                   <MapPin size={12} className="text-stone-400" /> Head Quarters
-                </h3>
-                <p className="text-sm font-bold">Resonance District, Studio 402</p>
-                <p className="text-sm font-bold text-stone-400">Manhattan, NY 10001</p>
-              </div>
-            </div>
-
-            <div className="mt-12 pt-8 border-t border-stone-100">
-                <a href="#" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:text-stone-400 transition-colors">
-                    <MessageSquare size={14} /> Instagram <ArrowUpRight size={12} />
-                </a>
-            </div>
-          </div>
-
-          {/* Right Column: Compact Form (7 Cols) */}
-          <div className="lg:col-span-7">
-            <div className="bg-stone-50 p-8 md:p-10 rounded-3xl border border-stone-100 shadow-sm relative overflow-hidden">
-              {/* Subtle accent glow */}
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-stone-200 rounded-full blur-3xl opacity-50"></div>
-
-              <form onSubmit={handleSubmit} className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Name</label>
+          {/* LEFT: Elegant Form Card */}
+          <form 
+            onSubmit={handleSubmit} 
+            className="lg:col-span-7 bg-white border border-stone-200 p-8 md:p-10 rounded-3xl space-y-10 shadow-sm flex flex-col justify-between"
+          >
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {/* Full Name */}
+                <div className="flex flex-col space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-stone-600">
+                    Full Name
+                  </label>
                   <input 
                     type="text" 
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-xs focus:border-black outline-none transition-all placeholder:text-stone-300"
-                    placeholder="Enter your name"
+                    className="w-full bg-transparent border-b-2 border-stone-200 py-2 text-sm text-stone-900 focus:border-stone-900 outline-none transition-colors placeholder:text-stone-400 font-normal"
+                    placeholder="Your name"
                   />
                 </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Email</label>
+                {/* Email Address */}
+                <div className="flex flex-col space-y-2">
+                  <label className="text-xs font-semibold uppercase tracking-wider text-stone-600">
+                    Email Address
+                  </label>
                   <input 
                     type="email" 
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-xs focus:border-black outline-none transition-all placeholder:text-stone-300"
-                    placeholder="you@aura.com"
+                    className="w-full bg-transparent border-b-2 border-stone-200 py-2 text-sm text-stone-900 focus:border-stone-900 outline-none transition-colors placeholder:text-stone-400 font-normal"
+                    placeholder="email@example.com"
                   />
                 </div>
+              </div>
 
-                <div className="space-y-1.5 md:col-span-2">
-                  <label className="text-[9px] font-black uppercase tracking-[0.2em] text-stone-400 ml-1">Message</label>
-                  <textarea 
-                    required
-                    rows={4} // Reduced rows to keep height down
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-xs focus:border-black outline-none transition-all resize-none placeholder:text-stone-300"
-                    placeholder="Tell us about the instrument you're looking for..."
-                  />
-                </div>
+              {/* Subject */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-stone-600">
+                  Subject
+                </label>
+                <input 
+                  type="text" 
+                  required
+                  value={formData.subject}
+                  onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                  className="w-full bg-transparent border-b-2 border-stone-200 py-2 text-sm text-stone-900 focus:border-stone-900 outline-none transition-colors placeholder:text-stone-400 font-normal"
+                  placeholder="Inquiry detail"
+                />
+              </div>
 
-                <div className="md:col-span-2 pt-2">
-                  <button 
-                    type="submit"
-                    disabled={isSending}
-                    className="w-full md:w-auto bg-black text-white px-10 py-4 rounded-full text-[10px] font-black uppercase tracking-[0.3em] hover:bg-stone-800 transition-all active:scale-95 disabled:bg-stone-300 flex items-center justify-center gap-3"
-                  >
-                    {isSending ? "SENDING..." : (
-                        <>
-                            Submit Inquiry <Send size={12} />
-                        </>
-                    )}
-                  </button>
-                </div>
-              </form>
+              {/* Message */}
+              <div className="flex flex-col space-y-2">
+                <label className="text-xs font-semibold uppercase tracking-wider text-stone-600">
+                  Message
+                </label>
+                <textarea 
+                  required
+                  rows={3}
+                  value={formData.message}
+                  onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  className="w-full bg-transparent border-b-2 border-stone-200 py-2 text-sm text-stone-900 focus:border-stone-900 outline-none transition-colors resize-none placeholder:text-stone-400 font-normal leading-relaxed"
+                  placeholder="Tell us about your project..."
+                />
+              </div>
             </div>
+
+            <div className="pt-4">
+              <button 
+                type="submit"
+                disabled={isSending}
+                className="w-full md:w-auto bg-stone-900 text-white px-8 py-3.5 text-xs font-bold uppercase tracking-widest hover:bg-stone-800 transition-colors disabled:bg-stone-200 disabled:text-stone-400 rounded-xl shadow-sm flex items-center justify-center gap-2.5"
+              >
+                {isSending ? "Sending..." : <>Send Message <Send size={12} /></>}
+              </button>
+            </div>
+          </form>
+
+          {/* RIGHT: Contact Information Cards Stack */}
+          <div className="lg:col-span-5 flex flex-col gap-6">
+            
+            <div className="flex-1 bg-white border border-stone-200 p-8 rounded-3xl space-y-8 shadow-sm flex flex-col justify-center">
+              
+              {/* Location */}
+              <div className="flex gap-4 items-start">
+                <div className="p-2.5 bg-stone-100 rounded-xl text-stone-700 shrink-0">
+                  <MapPin size={16} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1">
+                    Atelier Location
+                  </h4>
+                  <p className="text-sm font-normal text-stone-800 leading-relaxed">
+                    Resonance District, Studio 402<br />Manhattan, NY 10001
+                  </p>
+                </div>
+              </div>
+
+              {/* Correspondence */}
+              <div className="flex gap-4 items-start">
+                <div className="p-2.5 bg-stone-100 rounded-xl text-stone-700 shrink-0">
+                  <Mail size={16} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1">
+                    Digital Correspondence
+                  </h4>
+                  <p className="text-sm font-normal text-stone-800 leading-relaxed">
+                    +1 (888) AURA-TONE<br />
+                    <span className="text-stone-950 font-medium hover:text-stone-600 transition-colors cursor-pointer border-b-2 border-stone-200 hover:border-stone-600 pb-0.5">
+                      concierge@auraguitars.com
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              {/* Hours */}
+              <div className="flex gap-4 items-start">
+                <div className="p-2.5 bg-stone-100 rounded-xl text-stone-700 shrink-0">
+                  <Clock size={16} />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1">
+                    Atelier Hours
+                  </h4>
+                  <p className="text-sm font-normal text-stone-800 leading-relaxed">
+                    Mon — Fri: 10AM – 6PM EST<br />Sat: By Appointment Only
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Image Card */}
+            <div className="h-40 rounded-3xl overflow-hidden border border-stone-200 shadow-sm relative bg-stone-100">
+              <img 
+                src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2070&auto=format&fit=crop" 
+                alt="Aura Guitars Workshop" 
+                className="w-full h-full object-cover grayscale opacity-95 contrast-[1.05]"
+              />
+            </div>
+
           </div>
 
         </div>

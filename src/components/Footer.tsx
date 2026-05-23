@@ -1,4 +1,6 @@
 import logo from '../assets/logo.png'
+import { Phone, Mail } from "lucide-react"
+import { SiInstagram, SiFacebook, SiTiktok } from "react-icons/si";
 
 export default function Footer() {
   return (
@@ -49,14 +51,66 @@ export default function Footer() {
           </div>
 
           {/* Contact */}
-          <div className="md:justify-self-end">
-            <h4 className="font-bold text-sm mb-4">Get in touch</h4>
-            <p className="text-stone-500 text-xs">+1-212-456-7890</p>
-            <p className="text-stone-500 text-xs mb-4">contact@guitar.com</p>
-            <div className="flex gap-4 text-stone-700">
-              <span className="cursor-pointer hover:text-black text-sm font-bold">FB</span>
-              <span className="cursor-pointer hover:text-black text-sm font-bold">IG</span>
-              <span className="cursor-pointer hover:text-black text-sm font-bold">TT</span>
+          <div className="md:justify-self-end space-y-5">
+            <div>
+              <h4 className="font-bold text-sm mb-4">
+                Get in touch
+              </h4>
+              
+              {/* Contact Links with Micro-Icons */}
+              <div className="space-y-1.5">
+                <a 
+                  href="tel:+18882872866" 
+                  className="flex items-center gap-2 text-stone-500 hover:text-stone-900 text-xs font-light transition-colors group"
+                >
+                  <Phone size={12} className="text-stone-400 group-hover:text-stone-900 transition-colors" />
+                  <span>+1 (888) AURA-TONE</span>
+                </a>
+                
+                <a 
+                  href="mailto:concierge@auraguitars.com" 
+                  className="flex items-center gap-2 text-stone-500 hover:text-stone-900 text-xs font-light transition-colors group"
+                >
+                  <Mail size={12} className="text-stone-400 group-hover:text-stone-900 transition-colors" />
+                  <span className="border-b border-transparent group-hover:border-stone-900 pb-0.5">
+                    concierge@auraguitars.com
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            {/* Social Media Premium Icons Container */}
+            <div className="flex gap-3.5 text-stone-400 pt-1">
+              <a 
+                href="https://instagram.com" 
+                target="_blank" 
+                rel="noreferrer"
+                aria-label="Instagram"
+                className="p-2 bg-stone-50 border border-stone-100 rounded-xl hover:bg-white hover:text-stone-900 hover:border-stone-200 hover:shadow-sm transition-all duration-200"
+              >
+                <SiInstagram size={20} color="currentColor" />
+              </a>
+              
+              <a 
+                href="https://facebook.com" 
+                target="_blank" 
+                rel="noreferrer"
+                aria-label="Facebook"
+                className="p-2 bg-stone-50 border border-stone-100 rounded-xl hover:bg-white hover:text-stone-900 hover:border-stone-200 hover:shadow-sm transition-all duration-200"
+              >
+                <SiFacebook size={20} color="currentColor" />
+              </a>
+
+              <a 
+                href="https://tiktok.com" 
+                target="_blank" 
+                rel="noreferrer"
+                aria-label="TikTok"
+                className="p-2 bg-stone-50 border border-stone-100 rounded-xl hover:bg-white hover:text-stone-900 hover:border-stone-200 hover:shadow-sm transition-all duration-200 flex items-center justify-center font-bold text-[10px] leading-none tracking-tighter"
+              >
+                {/* Lucide doesn't have a TikTok icon by default, so we use a clean stylized vector-text box that scales beautifully with the other 15px icons */}
+                <SiTiktok size={20} color="currentColor" />
+              </a>
             </div>
           </div>
         </div>

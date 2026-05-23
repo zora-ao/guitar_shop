@@ -18,5 +18,5 @@ class Message(db.Model):
             "receiver_id": self.receiver_id,
             "content": self.content,
             "is_read": self.is_read,
-            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+            "created_at": self.created_at.isoformat() + "Z" if not self.created_at.isoformat().endswith('Z') else self.created_at.isoformat()
         }
