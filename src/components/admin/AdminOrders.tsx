@@ -32,7 +32,7 @@ const AdminOrders: React.FC = () => {
 
     return (
         <div className="max-w-7xl mx-auto px-4 py-10 font-sans">
-            <h1 className="text-xl font-bold mb-6 text-gray-700">Order Page</h1>
+            <h1 className="text-xl font-bold text-stone-800 mb-6 uppercase tracking-tight">Order Page</h1>
 
             <div className="flex flex-col gap-4">
                 {orders.map((order) => (
@@ -72,7 +72,7 @@ const AdminOrders: React.FC = () => {
 
                         {/* Column 3: Total Price (Spans 2/12) */}
                         <div className="text-lg font-bold text-gray-800 self-center md:col-span-2">
-                            ${order.total_amount.toFixed(2)}
+                            ₱{order.total_amount.toFixed(2)}
                         </div>
 
                         {/* Column 4: Status Dropdown (Spans 2/12 - Smaller) */}

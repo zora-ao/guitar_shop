@@ -85,9 +85,9 @@ export default function AdminAddProducts() {
       
       {/* 1. Gallery Section - Fixed 4-Slot Grid */}
       <div className="flex flex-col gap-4 items-center md:w-1/3">
-        <h3 className="text-xs font-medium self-start uppercase tracking-widest text-stone-500">
+        <h1 className="text-xl font-bold text-stone-800 mb-6 uppercase tracking-tight">
           Product Gallery
-        </h3>
+        </h1>
         
         <div className="grid grid-cols-2 gap-3 w-full">
           {[0, 1, 2, 3].map((index) => (
@@ -166,7 +166,7 @@ export default function AdminAddProducts() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium mb-2">Price ($)</label>
+            <label className="block text-sm font-medium mb-2">Price (₱)</label>
             <input type="number" required value={price} onChange={e => setPrice(e.target.value)} className="w-full border border-stone-300 rounded-sm px-4 py-2 text-sm focus:border-black outline-none" />
           </div>
           <div>

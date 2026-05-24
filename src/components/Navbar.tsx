@@ -47,6 +47,10 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
 
+  const handleCtaClick = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
   return (
     <nav className="flex items-center justify-between px-6 md:px-12 md:py-0 py-2 bg-[#FDFCFA] sticky top-0 z-40 border-b border-stone-100">
       
@@ -75,6 +79,7 @@ const Navbar = () => {
           <NavLink
             key={link.path}
             to={link.path}
+            onClick={handleCtaClick}
             className={({ isActive }) =>
               `relative px-6 py-2 z-10 font-medium text-sm transition-colors duration-300 ${
                 isActive ? "text-white" : "text-stone-500 hover:text-stone-800"

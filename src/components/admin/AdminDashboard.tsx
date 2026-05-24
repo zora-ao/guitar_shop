@@ -43,11 +43,10 @@ export default function AdminDashboard() {
     if (isError) return <div className="p-8 text-red-500 font-black">Failed to load dashboard data.</div>;
 
     return (
-        <div className="w-full space-y-6 p-4 md:p-6 lg:p-8">
+        <div className="w-full space-y-6 p-4 md:p-6 lg:p-8 bg-[#F5F5F5]">
             {/* Header */}
             <div>
-                <h2 className="text-xl md:text-2xl font-black uppercase tracking-tighter italic">Executive Overview</h2>
-                <p className="text-[9px] font-bold text-stone-400 uppercase tracking-[0.2em]">Performance Insights</p>
+                <h2 className="text-xl font-bold text-stone-800 mb-6 uppercase tracking-tight">Dashboard</h2>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-6 items-start">
@@ -99,7 +98,7 @@ export default function AdminDashboard() {
                     <div className="bg-black text-white p-6 rounded-[2rem] shadow-xl h-48 flex flex-col justify-between">
                         <div>
                             <p className="text-[8px] font-black uppercase tracking-widest text-stone-500 mb-1">Available Payout</p>
-                            <h2 className="text-3xl font-black italic tracking-tighter">₱{data.payout?.toLocaleString()}</h2>
+                            <h2 className="text-3xl font-black tracking-tighter">₱{data.payout?.toLocaleString()}</h2>
                         </div>
                         <button className="w-full bg-white text-black py-3 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-stone-100 transition-all">
                             Withdraw

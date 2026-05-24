@@ -3,48 +3,70 @@ import { Link } from 'react-router-dom';
 import about_image from '../assets/about_img.avif'
 
 const About = () => {
+  /* Global handler to snap the browser view to the top when navigating away */
+  const handleCtaClick = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
   return (
-    <div className="bg-white text-black font-sans selection:bg-black selection:text-white">
+    <div className="bg-white text-black font-sans selection:bg-black selection:text-white min-h-screen">
       
       {/* Cinematic Banner Hero */}
-      <section className="relative w-full h-[70vh] min-h-[500px] overflow-hidden bg-black">
-        {/* The Banner Image */}
+      <section className="relative w-full h-[75vh] min-h-[550px] overflow-hidden bg-black flex items-center">
+        {/* Subtle, premium dark mask over the image layout */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent z-10" />
+        
         <img 
           src={about_image} 
           alt="Aura Guitars Workshop" 
-          className="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all duration-1000 scale-105 hover:scale-100"
+          className="absolute inset-0 w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-[1200ms] ease-out scale-105 hover:scale-100"
         />
         
         {/* Text Overlay */}
-        <div className="absolute inset-0 flex flex-col justify-center px-6 md:px-12 max-w-6xl mx-auto">
-          <p className="text-white text-[10px] font-black uppercase tracking-[0.5em] mb-4 drop-shadow-md">
+        <div className="relative z-20 w-full max-w-6xl mx-auto px-6 md:px-12 lg:px-16">
+          <p className="text-stone-400 text-[10px] font-bold uppercase tracking-[0.4em] mb-4">
             Established 2026
           </p>
-          <h1 className="text-white text-7xl md:text-9xl font-black uppercase tracking-tighter leading-[0.8] drop-shadow-2xl mb-6">
-            Aura <br /> Guitars
+          <h1 className="text-white text-6xl md:text-8xl font-bold uppercase tracking-tighter leading-[0.85] mb-8">
+            Aura <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-stone-200 to-stone-500">
+              Guitars
+            </span>
           </h1>
-          <div className="h-1 w-24 bg-white mb-8"></div>
-          <p className="text-stone-200 max-w-md text-sm leading-relaxed font-medium drop-shadow-md">
-            Hand-crafted instruments for the modern virtuoso. We bridge the gap between 
-            architectural design and legendary tone.
+          <div className="h-[2px] w-12 bg-white mb-8 opacity-60"></div>
+          <p className="text-stone-300 max-w-sm text-xs md:text-sm leading-relaxed font-medium tracking-wide">
+            Hand-crafted instruments for the modern virtuoso. We bridge the absolute gap between 
+            architectural design precision and legendary raw tone.
           </p>
         </div>
       </section>
 
-      {/* Feature Grid - Minimalist Modern */}
-      <section className="bg-white py-24 px-6">
+      {/* Feature Grid - Framed Studio Layout */}
+      <section className="bg-white py-28 px-6 md:px-12 lg:px-16 border-b border-stone-100">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+          {/* Section Section Label Header */}
+          <div className="mb-16 border-b border-stone-100 pb-4">
+            <h2 className="text-[10px] font-bold uppercase tracking-[0.25em] text-stone-400">
+              Built To Perform
+            </h2>
+          </div>
+
+          {/* Grid using clean internal dividing borders instead of loose text */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-12 lg:gap-y-0 lg:divide-x lg:divide-stone-100">
             {[
-              { icon: <Music size={20}/>, title: "Pro Sound", desc: "Studio-grade resonance in every build." },
-              { icon: <ShieldCheck size={20}/>, title: "Vault Secure", desc: "Lifetime protection on all hardware." },
-              { icon: <Truck size={20}/>, title: "Express", desc: "Insured global delivery in 72 hours." },
-              { icon: <Sparkles size={20}/>, title: "Artisan Support", desc: "Direct access to our master shop." },
+              { icon: <Music size={18}/>, title: "Pro Sound", desc: "Studio-grade resonance engineered into every single build." },
+              { icon: <ShieldCheck size={18}/>, title: "Vault Secure", desc: "Lifetime structural protection guarantees on all stock hardware." },
+              { icon: <Truck size={18}/>, title: "Express Logistics", desc: "Fully insured global air-freight delivery drop within 72 hours." },
+              { icon: <Sparkles size={18}/>, title: "Artisan Support", desc: "Direct 1-on-1 backend access to our active master workbench." },
             ].map((val, i) => (
-              <div key={i} className="flex flex-col">
-                <div className="mb-6 text-black">{val.icon}</div>
-                <h3 className="text-xs font-black uppercase tracking-[0.2em] mb-3">{val.title}</h3>
-                <p className="text-[10px] uppercase font-bold tracking-tight text-stone-400 leading-4">
+              <div key={i} className="flex flex-col lg:px-6 first:pl-0 last:pr-0">
+                <div className="mb-5 text-black p-2 bg-stone-50 w-fit rounded-lg border border-stone-100">
+                  {val.icon}
+                </div>
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] mb-2 text-black">
+                  {val.title}
+                </h3>
+                <p className="text-xs text-stone-500 leading-relaxed font-normal">
                   {val.desc}
                 </p>
               </div>
@@ -54,17 +76,26 @@ const About = () => {
       </section>
 
       {/* Bottom CTA Section */}
-      <section className="py-24 border-t border-stone-100 text-center">
-        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-stone-400 mb-8">
-          Experience the Aura
-        </p>
-        <Link 
-          to="/collection" 
-          className="group inline-flex items-center gap-6 border-2 border-black px-12 py-5 rounded-full hover:bg-black hover:text-white transition-all duration-300"
-        >
-          <span className="text-[10px] font-black uppercase tracking-[0.3em]">Browse Collection</span>
-          <ArrowRight size={16} className="group-hover:translate-x-2 transition-transform"/>
-        </Link>
+      <section className="py-32 text-center bg-stone-50/50">
+        <div className="max-w-xl mx-auto px-6">
+          <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-stone-400 mb-3">
+            Experience the Aura
+          </p>
+          <h2 className="text-2xl font-bold uppercase tracking-tight text-black mb-8">
+            Ready to find your perfect instrument?
+          </h2>
+          
+          <Link 
+            to="/collection" 
+            onClick={handleCtaClick}
+            className="group relative inline-flex items-center justify-center gap-4 bg-black border border-black px-10 py-4 text-white overflow-hidden rounded-xl shadow-xs transition-all duration-300 hover:bg-stone-950"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-[0.25em] z-10">
+              Browse Vault Collection
+            </span>
+            <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform duration-300 z-10" />
+          </Link>
+        </div>
       </section>
     </div>
   );

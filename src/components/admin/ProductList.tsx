@@ -111,7 +111,7 @@ const ProductList: React.FC = () => {
                             <div className="flex justify-between w-full md:contents">
                                 <span className="text-sm font-bold text-stone-900 md:text-stone-700">
                                     <span className="md:hidden text-stone-400 font-normal mr-1">Price:</span>
-                                    ${product.price}
+                                    ₱{product.price}
                                 </span>
                                 <span className={`text-sm font-bold ${product.stock < 5 ? 'text-red-500' : 'text-stone-600'}`}>
                                     <span className="md:hidden text-stone-400 font-normal mr-1">Stock:</span>

@@ -2,6 +2,14 @@
 
 @import "tailwindcss";
 
+@theme {
+  /* Prefix your colors with --color- to make them Tailwind classes */
+  --color-primary: #1B211A;       
+  --color-secondary: #1B211A;     
+  --color-accent: #8BAE66;        
+  --color-neutral-custom: #EBD5AB; 
+}
+
 body {
     font-family: 'Inter', sans-serif;
     @apply bg-[#FDFCFA] text-stone-900;

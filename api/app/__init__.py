@@ -55,7 +55,10 @@ def create_app():
     CORS(
         app,
         supports_credentials=True,  
-        origins=["https://guitar-shop-rho-teal.vercel.app"],
+        origins=[
+            "http://localhost:5173",
+            "https://guitar-shop-rho-teal.vercel.app"
+            ],
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
 

@@ -1,122 +1,154 @@
 import logo from '../assets/logo.png'
-import { Phone, Mail } from "lucide-react"
+import { Phone, Mail, ArrowRight } from "lucide-react"
 import { SiInstagram, SiFacebook, SiTiktok } from "react-icons/si";
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  /* Helper to snap page positions seamlessly back to top on redirection */
+  const handleFooterLinkClick = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  };
+
   return (
-    <footer className="bg-[#FDFCFA] pt-16">
-      {/* Newsletter */}
-      <div className="text-center px-6 mb-20">
-        <h2 className="text-3xl font-bold font-serif mb-3">Sign Up To Our Newsletter</h2>
-        <p className="text-stone-500 text-sm mb-6 max-w-md mx-auto">
-          Lorem ipsum dolor sit amet consectetur. Tempus neque a vestibulum arcu mi et.
+    <footer className="bg-white border-t border-stone-100 pt-24">
+      {/* Newsletter Section */}
+      <div className="text-center px-6 max-w-2xl mx-auto mb-24">
+        <h2 className="text-sm font-bold uppercase tracking-[0.25em] text-black mb-3">
+          Join the Registry
+        </h2>
+        <p className="text-stone-400 text-xs mb-8 max-w-sm mx-auto leading-relaxed">
+          Subscribe to receive private drops, custom workshop archives, and priority access to limited guitar allocations.
         </p>
-        <div className="flex max-w-md mx-auto border border-stone-300 rounded-full overflow-hidden p-1">
+        
+        {/* Sleek Minimalist Linear Input Bar */}
+        <form 
+          onSubmit={(e) => e.preventDefault()} 
+          className="flex items-center border-b border-stone-200 pb-2 max-w-md mx-auto focus-within:border-black transition-colors"
+        >
           <input 
             type="email" 
-            placeholder="Your email" 
-            className="flex-1 px-4 py-2 outline-none text-sm bg-transparent"
+            placeholder="ENTER YOUR EMAIL" 
+            required
+            className="flex-1 bg-transparent border-0 outline-none text-xs font-medium tracking-wider text-black placeholder-stone-300 uppercase py-1"
           />
-          <button className="bg-black text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-stone-800">
-            Subscribe
+          <button 
+            type="submit"
+            aria-label="Subscribe to newsletter"
+            className="text-stone-400 hover:text-black transition-colors px-2 py-1"
+          >
+            <ArrowRight size={16} />
           </button>
-        </div>
+        </form>
       </div>
 
-      <div className="border-t border-stone-200 px-6 md:px-12 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center gap-2">
+      {/* Main Structural Info Directory */}
+      <div className="border-t border-stone-100 px-6 md:px-12 lg:px-16 py-16 bg-stone-50/40">
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-8">
+          
+          {/* Column 1: Brand Space (Takes up 5 grid spans for breathing room) */}
+          <div className="md:col-span-5 space-y-4">
+            <div className="flex items-center">
               <img 
                 src={logo} 
-                alt="Vibe Logo" 
-                className="h-32 -my-8 w-auto object-contain transition-transform duration-300 hover:scale-105" 
+                alt="Aura Guitars Logo" 
+                className="h-24 -my-10 w-auto object-contain" 
               />
             </div>
-            <p className="text-stone-500 text-xs leading-relaxed max-w-sm">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            <p className="text-stone-400 text-xs leading-relaxed max-w-xs font-normal">
+              Architectural precision meets legendary acoustic resonance. Crafting high-performance instruments for the modern virtuoso.
             </p>
           </div>
 
-          {/* Links */}
-          <div className="md:justify-self-center">
-            <h4 className="font-bold text-sm mb-4">Company</h4>
-            <ul className="text-stone-500 text-xs space-y-2">
-              <li><a href="#" className="hover:text-black">Home</a></li>
-              <li><a href="#" className="hover:text-black">About Us</a></li>
-              <li><a href="#" className="hover:text-black">Delivery</a></li>
-              <li><a href="#" className="hover:text-black">Privacy Policy</a></li>
+          {/* Column 2: Internal Directory (Takes up 3 grid spans) */}
+          <div className="md:col-span-3">
+            <h4 className="font-bold text-[10px] uppercase tracking-widest text-black mb-5">
+              Company
+            </h4>
+            <ul className="text-stone-500 text-xs space-y-3 font-medium">
+              <li>
+                <Link to="/" onClick={handleFooterLinkClick} className="hover:text-black transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" onClick={handleFooterLinkClick} className="hover:text-black transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/collection" onClick={handleFooterLinkClick} className="hover:text-black transition-colors">
+                  Vault Collection
+                </Link>
+              </li>
+              <li>
+                <Link to="/privacy" onClick={handleFooterLinkClick} className="hover:text-black transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="md:justify-self-end space-y-5">
+          {/* Column 3: Contacts & Social Hubs (Takes up 4 grid spans) */}
+          <div className="md:col-span-4 space-y-6 md:justify-self-end w-full max-w-xs md:max-w-none">
             <div>
-              <h4 className="font-bold text-sm mb-4">
+              <h4 className="font-bold text-[10px] uppercase tracking-widest text-black mb-5">
                 Get in touch
               </h4>
               
-              {/* Contact Links with Micro-Icons */}
-              <div className="space-y-1.5">
+              <div className="space-y-2.5">
                 <a 
                   href="tel:+18882872866" 
-                  className="flex items-center gap-2 text-stone-500 hover:text-stone-900 text-xs font-light transition-colors group"
+                  className="flex items-center gap-3 text-stone-500 hover:text-black text-xs font-medium transition-colors group"
                 >
-                  <Phone size={12} className="text-stone-400 group-hover:text-stone-900 transition-colors" />
+                  <Phone size={13} className="text-stone-400 group-hover:text-black transition-colors" />
                   <span>+1 (888) AURA-TONE</span>
                 </a>
                 
                 <a 
                   href="mailto:concierge@auraguitars.com" 
-                  className="flex items-center gap-2 text-stone-500 hover:text-stone-900 text-xs font-light transition-colors group"
+                  className="flex items-center gap-3 text-stone-500 hover:text-black text-xs font-medium transition-colors group"
                 >
-                  <Mail size={12} className="text-stone-400 group-hover:text-stone-900 transition-colors" />
-                  <span className="border-b border-transparent group-hover:border-stone-900 pb-0.5">
+                  <Mail size={13} className="text-stone-400 group-hover:text-black transition-colors" />
+                  <span className="border-b border-transparent group-hover:border-black pb-0.5 transition-all">
                     concierge@auraguitars.com
                   </span>
                 </a>
               </div>
             </div>
 
-            {/* Social Media Premium Icons Container */}
-            <div className="flex gap-3.5 text-stone-400 pt-1">
-              <a 
-                href="https://instagram.com" 
-                target="_blank" 
-                rel="noreferrer"
-                aria-label="Instagram"
-                className="p-2 bg-stone-50 border border-stone-100 rounded-xl hover:bg-white hover:text-stone-900 hover:border-stone-200 hover:shadow-sm transition-all duration-200"
-              >
-                <SiInstagram size={20} color="currentColor" />
-              </a>
-              
-              <a 
-                href="https://facebook.com" 
-                target="_blank" 
-                rel="noreferrer"
-                aria-label="Facebook"
-                className="p-2 bg-stone-50 border border-stone-100 rounded-xl hover:bg-white hover:text-stone-900 hover:border-stone-200 hover:shadow-sm transition-all duration-200"
-              >
-                <SiFacebook size={20} color="currentColor" />
-              </a>
-
-              <a 
-                href="https://tiktok.com" 
-                target="_blank" 
-                rel="noreferrer"
-                aria-label="TikTok"
-                className="p-2 bg-stone-50 border border-stone-100 rounded-xl hover:bg-white hover:text-stone-900 hover:border-stone-200 hover:shadow-sm transition-all duration-200 flex items-center justify-center font-bold text-[10px] leading-none tracking-tighter"
-              >
-                {/* Lucide doesn't have a TikTok icon by default, so we use a clean stylized vector-text box that scales beautifully with the other 15px icons */}
-                <SiTiktok size={20} color="currentColor" />
-              </a>
+            {/* Social Media Containers */}
+            <div className="flex gap-2.5 pt-1">
+              {[
+                { href: "https://instagram.com", icon: <SiInstagram size={15} />, label: "Instagram" },
+                { href: "https://facebook.com", icon: <SiFacebook size={15} />, label: "Facebook" },
+                { href: "https://tiktok.com", icon: <SiTiktok size={15} />, label: "TikTok" }
+              ].map((social) => (
+                <a 
+                  key={social.label}
+                  href={social.href} 
+                  target="_blank" 
+                  rel="noreferrer"
+                  aria-label={social.label}
+                  className="p-2.5 bg-white border border-stone-200 text-stone-400 rounded-xl hover:text-black hover:border-black hover:shadow-xs transition-all duration-200"
+                >
+                  {social.icon}
+                </a>
+              ))}
             </div>
           </div>
+
         </div>
 
-        <div className="text-center text-xs text-stone-400 mt-12">
-          Copyright 2026@ guitar.com - All Right Reserved.
+        {/* Bottom Metadata Bar */}
+        <div className="mt-16 pt-8 border-t border-stone-200/60 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] font-medium uppercase tracking-widest text-stone-400">
+          <div>
+            &copy; {currentYear} Aura Guitars. All Rights Reserved.
+          </div>
+          <div className="flex gap-6 text-[9px]">
+            <span className="hover:text-black cursor-pointer transition-colors">Terms of Service</span>
+          </div>
         </div>
       </div>
     </footer>
