@@ -3,12 +3,10 @@ import { type LoginResponse, type User } from "../types/auth";
 
 
 // src/api/support.ts
-export async function getSupportInfo(): Promise<{ id: number }> {
-    const response = await fetch('http://localhost:5000/api/auth/support-info');
-    if (!response.ok) {
-        throw new Error('Network response was not ok');
-    }
-    return response.json();
+export async function getSupportInfo(): Promise<{ id: number; username: string }> {
+    return apiFetch<{ id: number; username: string }>('/auth/support-info', {
+        method: 'GET'
+    });
 }
 
 // Added Signup export
