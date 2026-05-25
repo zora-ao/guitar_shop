@@ -24,7 +24,7 @@ const SearchBar = () => {
 
     return (
         <div className="bg-stone-50 border-b border-stone-200 animate-in fade-in slide-in-from-top duration-300">
-            <div className="max-w-3xl mx-auto py-4 px-6 flex items-center gap-4">
+            <div className="max-w-3xl mx-auto py-4 px-6 flex items-center gap-0">
                 <div className="flex-1 flex items-center bg-white border border-stone-200 rounded-full px-5 py-2 shadow-sm focus-within:border-stone-400 transition-colors">
                     <Search size={18} className="text-stone-400" />
                     <input 

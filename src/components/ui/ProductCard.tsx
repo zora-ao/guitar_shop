@@ -31,7 +31,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       <div className="space-y-1">
         <h3 className="text-sm font-medium text-stone-800">{name}</h3>
         <p className="text-xs text-stone-500 uppercase tracking-wider">{category}</p>
-        <p className="text-sm font-bold text-stone-900">${price}</p>
+        <p className="text-sm font-bold text-stone-900">₱{price}</p>
       </div>
     </Link>
   );

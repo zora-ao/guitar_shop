@@ -88,7 +88,7 @@ export const NotificationDropdown = () => {
                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    className="absolute right-0 mt-2 w-80 bg-white border border-stone-200 shadow-2xl rounded-2xl z-50 overflow-hidden"
+                    className="absolute -right-10 mt-2 w-80 bg-white border border-stone-200 shadow-2xl rounded-2xl z-50 overflow-hidden"
                 >
                 <div className="p-4 border-b border-stone-100 bg-stone-50/50 flex justify-between items-center">
                     <h4 className="text-[10px] font-black uppercase tracking-widest text-stone-900">

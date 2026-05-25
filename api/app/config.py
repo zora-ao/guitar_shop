@@ -10,5 +10,7 @@ class Config:
         "postgresql://postgres:A40o8ccjr@localhost/guitar_shop"
     )
 
+    # SQLALCHEMY_DATABASE_URI = "postgresql://postgres:A40o8ccjr@localhost/guitar_shop"
+
     
     SQLALCHEMY_TRACK_MODIFICATIONS = False
