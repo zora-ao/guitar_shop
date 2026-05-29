@@ -18,7 +18,7 @@ const ReviewItem = ({ review }: { review: Review }) => {
     });
 
     return (
-        <div className="flex gap-6 p-6 bg-white rounded-2xl border border-stone-200 shadow-sm hover:shadow-md transition-all duration-300">
+        <div className="flex gap-6 p-6 bg-white shadow-sm hover:shadow-md transition-all duration-300">
             {/* Boring Avatar replaces DiceBear */}
             <div className="shrink-0 rounded-xl overflow-hidden border border-stone-100 bg-stone-50">
                 <Avatar
@@ -69,7 +69,7 @@ export const ReviewList: React.FC<ReviewListProps> = ({ reviews }) => {
     }
 
     return (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-0">
             {reviews.map((review) => (
                 <ReviewItem key={review.id} review={review} />
             ))}

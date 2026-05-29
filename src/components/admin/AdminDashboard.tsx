@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Line, LineChart, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { fetchAdminStats } from "../../api/admin";
+import LoadingSpinner from "../../utils/LoadingSpinner";
 
 interface MiniStatProps {
     title: string;
@@ -39,7 +40,9 @@ export default function AdminDashboard() {
         queryFn: fetchAdminStats,
     });
 
-    if (isLoading) return <div className="p-8 font-black uppercase tracking-widest animate-pulse">Loading Analytics...</div>;
+    if (isLoading) {
+        return <LoadingSpinner message="Loading Dashboard" />;
+    }
     if (isError) return <div className="p-8 text-red-500 font-black">Failed to load dashboard data.</div>;
 
     return (

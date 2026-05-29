@@ -24,16 +24,11 @@ export default function AdminChat() {
   });
 
   return (
-    /* 1. Added full viewport tracking context to the wrapper element */
     <div className="w-full max-w-7xl mx-auto h-[calc(100dvh-64px)] md:h-auto">
       
-      {/* 
-        2. CHANGED: Fixed positioning maps the layout context directly inside the screen bounds on mobile.
-        It shifts down below a standard 64px (top-16) navigation header line.
-      */}
       <div className="flex fixed inset-0 top-16 md:relative md:top-0 md:h-screen bg-stone-50 overflow-hidden shadow-none md:shadow-xl md:shadow-stone-200/40">
         
-        {/* LEFT: Contact List */}
+
         <div className={`w-full md:w-85 border-r border-stone-200/60 flex flex-col bg-stone-100/40 backdrop-blur-sm transition-all duration-300 h-full ${
           selectedUser ? 'hidden md:flex' : 'flex'
         }`}>

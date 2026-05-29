@@ -2,6 +2,7 @@ import React from 'react';
 import { Package } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAdminOrders, updateOrderStatus } from '../../api/admin';
+import LoadingSpinner from '../../utils/LoadingSpinner';
 
 const AdminOrders: React.FC = () => {
     const queryClient = useQueryClient();
@@ -27,7 +28,9 @@ const AdminOrders: React.FC = () => {
         mutation.mutate({ id: orderId, status: newStatus });
     };
 
-    if (isLoading) return <div className="p-10 text-center text-gray-500">Loading...</div>;
+    if (isLoading) {
+        return <LoadingSpinner message="Loading Orders." />;
+    }
     if (isError) return <div className="p-10 text-center text-red-500">Error loading orders.</div>;
 
     return (

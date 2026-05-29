@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Product } from '../../types/product';
 import { deleteProduct, getAdminProducts, updateProduct } from '../../api/admin';
+import LoadingSpinner from '../../utils/LoadingSpinner';
 
 const ProductList: React.FC = () => {
     const queryClient = useQueryClient();
@@ -79,7 +80,9 @@ const ProductList: React.FC = () => {
         // Dependency on .id prevents state reset when typing
     }, [editingProduct?.id]);
 
-    if (isLoading) return <div className="p-8 text-stone-500">Loading...</div>;
+    if (isLoading) {
+        return <LoadingSpinner message="Loading Instruments" />;
+    }
     if (error) return <div className="p-8 text-red-500">Error loading products.</div>;
 
     return (

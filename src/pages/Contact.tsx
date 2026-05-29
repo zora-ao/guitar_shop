@@ -126,10 +126,10 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1">
-                    Atelier Location
+                    Location
                   </h4>
                   <p className="text-sm font-normal text-stone-800 leading-relaxed">
-                    Resonance District, Studio 402<br />Manhattan, NY 10001
+                    Santa Cruz, Studio 402<br />Laguna, street 10001
                   </p>
                 </div>
               </div>
@@ -146,7 +146,7 @@ const Contact = () => {
                   <p className="text-sm font-normal text-stone-800 leading-relaxed">
                     +1 (888) AURA-TONE<br />
                     <span className="text-stone-950 font-medium hover:text-stone-600 transition-colors cursor-pointer border-b-2 border-stone-200 hover:border-stone-600 pb-0.5">
-                      concierge@auraguitars.com
+                      aozora@auraguitars.com
                     </span>
                   </p>
                 </div>
@@ -159,7 +159,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="text-xs font-bold uppercase tracking-wider text-stone-500 mb-1">
-                    Atelier Hours
+                    Hours
                   </h4>
                   <p className="text-sm font-normal text-stone-800 leading-relaxed">
                     Mon — Fri: 10AM – 6PM EST<br />Sat: By Appointment Only
