@@ -17,7 +17,7 @@ export default function AdminAddProducts() {
   const [images, setImages] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
 
-  const categories = ["Acoustic", "Electric", "Acoustic-Electric"];
+  const categories = ["Acoustic", "Electric", "Bass", "Hollow body", "Classical", "Custom"];
 
   const mutation = useMutation({
     mutationFn: addProduct, 

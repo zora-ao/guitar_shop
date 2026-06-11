@@ -188,10 +188,12 @@ const ProductList: React.FC = () => {
                                     <div>
                                         <label className="block text-[10px] font-black uppercase text-stone-400 mb-1">Category</label>
                                         <select className="w-full border-stone-200 border p-3 rounded-xl bg-white" value={editingProduct.category} onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value })}>
-                                            <option value="Strings">Strings</option>
-                                            <option value="Wind">Wind</option>
-                                            <option value="Percussion">Percussion</option>
-                                            <option value="Keyboards">Keyboards</option>
+                                            <option value="Acoustic">Acoustic</option>
+                                            <option value="Electric">Electric</option>
+                                            <option value="Bass">Bass</option>
+                                            <option value="Classical">Classical</option>
+                                            <option value="Hollow body">Hollow body</option>
+                                            <option value="Custom">Custom</option>
                                         </select>
                                     </div>
                                     <div className="flex items-center pt-4">

@@ -6,6 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.user import User
 from sqlalchemy.orm.attributes import flag_modified
 import json
+from werkzeug.utils import secure_filename
 
 product_bp = Blueprint("products", __name__)
 
@@ -22,29 +23,35 @@ def get_product(id):
 
 @product_bp.route("/add_products", methods=["POST"])
 def add_product():
+    # 1. Initialize the variable safely at the very beginning of the function
+    cloudinary_urls = [] 
+
     try:
-        # 1. Use request.form for the text fields
         name = request.form.get("name")
         price = request.form.get("price")
         description = request.form.get("description")
         category = request.form.get("category")
         stock = request.form.get("stock")
-        is_best_seller = request.form.get("isBestSeller") == "true"
+        is_best_seller = request.form.get("is_best_seller") == "1"
 
-        # 2. Handle the Images
-        # Note: Your frontend sends multiple files under the key 'images'
+        if not name or not price or not stock:
+            return jsonify({"error": "Missing required fields"}), 400
+
+        # 2. Collect files and stream them to the cloud
         uploaded_files = request.files.getlist("images")
-        image_filenames = []
-
-        # TEMPORARY LOGIC: In a real app, you'd upload to Cloudinary or S3.
-        # For now, let's just grab the names or save them locally.
+        
         for file in uploaded_files:
-            if file.filename:
-                filename = secure_filename(file.filename)
-                # Save file code here if needed: file.save(os.path.join(UPLOAD_FOLDER, filename))
-                image_filenames.append(filename) 
+            if file.filename and file.filename != '':
+                upload_result = cloudinary.uploader.upload(
+                    file,
+                    folder="vibestrings_products"
+                )
+                secure_url = upload_result.get("secure_url")
+                if secure_url:
+                    # Appends cleanly into our function-scoped array
+                    cloudinary_urls.append(secure_url)
 
-        # 3. Create the product object
+        # 3. Save to database using the EXACT matching name
         new_product = Product(
             name=name,
             price=float(price),
@@ -52,7 +59,7 @@ def add_product():
             category=category,
             stock=int(stock),
             is_best_seller=is_best_seller,
-            images=image_filenames  # This matches your ARRAY(db.String)
+            images=cloudinary_urls  # ✅ MATCHES EXACTLY now!
         )
 
         db.session.add(new_product)
@@ -62,8 +69,9 @@ def add_product():
 
     except Exception as e:
         db.session.rollback()
-        print(f"BACKEND ERROR: {str(e)}") # Watch your terminal for this!
-        return jsonify({"error": str(e)}), 500
+        print(f"❌ BACKEND ERROR: {str(e)}")
+        return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
+
 
 @product_bp.route("/<int:id>", methods=["DELETE"])
 @jwt_required()

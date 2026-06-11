@@ -95,6 +95,11 @@ const ProductDetails = () => {
         ? product.images
         : [product.image_url];
 
+    const formattedPrice = Number(product.price).toLocaleString('en-US', {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+    });
+
     return (
         <div className="min-h-screen bg-[#FDFCFA] pb-20">
             <main className="max-w-7xl mx-auto px-6 md:px-12 py-10">
@@ -145,7 +150,7 @@ const ProductDetails = () => {
                         <div>
                             <h2 className="text-4xl md:text-4xl font-serif text-stone-900 mb-2">{product.name}</h2>
                             <div className="flex items-center gap-4">
-                                <p className="text-2xl font-bold text-stone-800">${product.price}</p>
+                                <p className="text-2xl font-bold text-stone-800">${formattedPrice}</p>
                                 {product.stock > 0 ? (
                                     <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded-sm ${
                                         product.stock <= 5 ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-600'

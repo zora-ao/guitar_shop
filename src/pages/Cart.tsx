@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom';
 const Cart: React.FC = () => {
     const context = useCart();
     const { user } = useAuth();
-    
 
     // 1. Safety Check: If context is undefined, show a clear message
     if (!context) {
@@ -26,9 +25,17 @@ const Cart: React.FC = () => {
         cartTotal = 0 
     } = context;
 
-    // 3. Logic Safety
-    const shippingFee = cart.length > 0 ? 10.00 : 0;
+    // 3. Logic Safety & Math Updates
+    const shippingFee = cart.length > 0 ? 500.00 : 0; 
     const finalTotal = (cartTotal || 0) + shippingFee;
+
+    // Helper utility function for local currency rendering
+    const formatCurrency = (amount: number) => {
+        return Number(amount).toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+        });
+    };
 
     if (cart.length === 0) {
         return (
@@ -49,14 +56,32 @@ const Cart: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-16">
                     {/* Left Side: Items List */}
                     <div className="lg:col-span-2 space-y-8">
-                        {cart.map((item) => (
-                                <div key={item.id} className="flex gap-6 pb-8 border-b border-stone-200 group">
-                                    {/* Product Image */}
-                                    <div className="w-24 h-24 md:w-32 md:h-32 bg-white border border-stone-100 rounded-sm p-2 flex-shrink-0">
+                        {cart.map((item, idx) => {
+                            // FIXED: Extract target image URL robustly across arrays or fallback strings
+                            const productImageSource = 
+                                item.product?.images?.[0] || 
+                                item.product?.image_url || 
+                                "/placeholder-image.png";
+
+                            return (
+                                <div key={item.id || idx} className="flex gap-6 pb-8 border-b border-stone-200 group">
+                                    
+                                    {/* Product Image Wrapper */}
+                                    <div className="w-24 h-24 md:w-32 md:h-32 bg-white border border-stone-100 rounded-sm p-2 flex-shrink-0 flex items-center justify-center overflow-hidden">
                                         <img 
-                                            src={ item.product?.images?.[0] || item.product?.image_url || item.product.image_url || "/placeholder-image.png"} 
+                                            // FIXED: Using a unique combination key binds image life lifecycle tightly to state shifts
+                                            key={`${item.product?.id || idx}-${productImageSource}`}
+                                            src={productImageSource} 
                                             alt={item.product?.name || "Product"} 
-                                            className="w-full h-full object-contain" 
+                                            loading="eager" // Forces the browser to treat item rendering as high priority
+                                            className="w-full h-full object-contain transition-opacity duration-300 group-hover:opacity-90"
+                                            onError={(e) => {
+                                                // Safe failure handler if standard database entry URL breaks instantly
+                                                const target = e.target as HTMLImageElement;
+                                                if (target.src !== "/placeholder-image.png") {
+                                                    target.src = "/placeholder-image.png";
+                                                }
+                                            }}
                                         />
                                     </div>
 
@@ -64,10 +89,9 @@ const Cart: React.FC = () => {
                                     <div className="flex-1 flex flex-col justify-between py-1">
                                         <div className="flex justify-between items-start">
                                             <div>
-                                                <h3 className="text-lg font-medium text-stone-900">{item.product.name || "Unnamed Product"}</h3>
-                                                {/* Safety: toFixed(2) will crash if item.price is undefined */}
+                                                <h3 className="text-lg font-medium text-stone-900">{item.product?.name || "Unnamed Product"}</h3>
                                                 <p className="text-stone-500 text-sm mt-1">
-                                                    ${(item.product.price || 0).toFixed(2)}
+                                                    ₱{formatCurrency(item.product?.price || 0)}
                                                 </p>
                                             </div>
                                             <button 
@@ -81,7 +105,7 @@ const Cart: React.FC = () => {
                                         {/* Quantity Controls */}
                                         <div className="flex items-center border border-stone-200 w-fit rounded-sm bg-white mt-4">
                                             <button 
-                                                onClick={() => updateQuantity(item.product.id, (item.quantity || 1) - 1)}
+                                                onClick={() => updateQuantity(item.product?.id, (item.quantity || 1) - 1)}
                                                 disabled={item.quantity <= 1}
                                                 className="px-3 py-1 hover:bg-stone-50 text-stone-600"
                                             >
@@ -91,7 +115,7 @@ const Cart: React.FC = () => {
                                                 {item.quantity || 1}
                                             </span>
                                             <button 
-                                                onClick={() => updateQuantity(item.product.id, (item.quantity || 1) + 1)}
+                                                onClick={() => updateQuantity(item.product?.id, (item.quantity || 1) + 1)}
                                                 className="px-3 py-1 hover:bg-stone-50 text-stone-600"
                                             >
                                                 <Plus size={14} />
@@ -99,7 +123,8 @@ const Cart: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                        ))}
+                            );
+                        })}
                     </div>
 
                     {/* Right Side: Summary Card */}
@@ -110,16 +135,15 @@ const Cart: React.FC = () => {
                             <div className="space-y-4 text-sm mb-8">
                                 <div className="flex justify-between text-stone-600">
                                     <span>Subtotal</span>
-                                    <span>${(cartTotal || 0).toFixed(2)}</span>
+                                    <span>₱{formatCurrency(cartTotal)}</span>
                                 </div>
                                 <div className="flex justify-between text-stone-600">
                                     <span>Shipping Fee</span>
-                                    <span>${shippingFee.toFixed(2)}</span>
+                                    <span>₱{formatCurrency(shippingFee)}</span>
                                 </div>
                                 <div className="pt-4 border-t border-stone-100 flex justify-between font-bold text-lg text-stone-900">
                                     <span>Total</span>
-                                    {/* Double safety check for the final number */}
-                                    <span>${(finalTotal || 0).toFixed(2)}</span>
+                                    <span>₱{formatCurrency(finalTotal)}</span>
                                 </div>
                             </div>
 

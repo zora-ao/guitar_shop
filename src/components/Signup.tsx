@@ -29,7 +29,7 @@ export default function Signup() {
             queryClient.setQueryData(["authUser"], data.user || data);
             
             toast.success("Account created successfully!");
-            navigate("/");
+            navigate("/login");
         } catch (err: any) {
             // apiFetch usually throws an error object with a message
             toast.error(err.message || "Signup failed");

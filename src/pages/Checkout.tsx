@@ -25,6 +25,18 @@ const Checkout: React.FC = () => {
   const [paymentMethod, setPaymentMethod] = useState('COD');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Fallback flat pricing values matching the localized storefront format
+  const shippingFeeValue = cart.length > 0 ? 500.00 : 0;
+  const computedTotalAmount = cartTotal + shippingFeeValue;
+
+  // Helper utility function for local currency rendering
+  const formatCurrency = (amount: number) => {
+    return Number(amount).toLocaleString('en-US', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+  };
+
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -46,8 +58,8 @@ const Checkout: React.FC = () => {
       zip_code: formData.zipcode,
       payment_method: paymentMethod,
       subtotal: cartTotal,
-      shipping_fee: 10.00,
-      total_amount: cartTotal + 10.00,
+      shipping_fee: shippingFeeValue, // FIXED: Dynamic variable synchronization
+      total_amount: computedTotalAmount, // FIXED: Corrected summary total sent to database
       items: cart.map(item => ({
         product_id: item.product.id,
         product_name: item.product.name,
@@ -169,7 +181,8 @@ const Checkout: React.FC = () => {
                           <p className="text-stone-400 text-[10px]">Qty: {item.quantity}</p>
                         </div>
                       </div>
-                      <span className="font-medium text-stone-800">${(item.product.price * item.quantity).toFixed(2)}</span>
+                      {/* FIXED: Individual feed item total calculations formatted */}
+                      <span className="font-medium text-stone-800">₱{formatCurrency(item.product.price * item.quantity)}</span>
                     </div>
                   ))}
                 </div>
@@ -183,17 +196,20 @@ const Checkout: React.FC = () => {
               <div className="space-y-3.5 pb-4 border-b border-stone-100 text-xs">
                 <div className="flex justify-between text-stone-500">
                   <span>Subtotal</span>
-                  <span className="text-stone-900 font-medium">${cartTotal.toFixed(2)}</span>
+                  {/* FIXED: Subtotal text layout conversion */}
+                  <span className="text-stone-900 font-medium">₱{formatCurrency(cartTotal)}</span>
                 </div>
                 <div className="flex justify-between text-stone-500">
                   <span>Insured Shipping</span>
-                  <span className="text-stone-900 font-medium">$10.00</span>
+                  {/* FIXED: Shipping text layout conversion */}
+                  <span className="text-stone-900 font-medium">₱{formatCurrency(shippingFeeValue)}</span>
                 </div>
               </div>
 
               <div className="flex justify-between items-center py-2">
                 <span className="text-xs font-bold uppercase tracking-wider text-stone-500">Total Amount</span>
-                <span className="text-stone-950 font-black text-2xl tracking-tight">${(cartTotal + 10).toFixed(2)}</span>
+                {/* FIXED: Grand total summary text localization */}
+                <span className="text-stone-950 font-black text-2xl tracking-tight">₱{formatCurrency(computedTotalAmount)}</span>
               </div>
 
               {/* Redesigned Payment Methods Selector */}

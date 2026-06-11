@@ -57,7 +57,7 @@ def create_app():
         supports_credentials=True,  
         origins=[
             "http://localhost:5173",
-            "https://guitar-shop-rho-teal.vercel.app"
+            "https://guitars-shop.vercel.app"
             ],
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
@@ -67,6 +67,8 @@ def create_app():
         api_key=os.getenv("CLOUDINARY_API_KEY"),
         api_secret=os.getenv("CLOUDINARY_API_SECRET")
     )
+
+    print(f"--- CLOUDINARY CONFIG CHECK: {os.getenv('CLOUDINARY_CLOUD_NAME')} ---")
 
     db.init_app(app)
     migrate.init_app(app, db)
