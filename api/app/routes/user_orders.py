@@ -2,13 +2,14 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.order import OrderItem, Order
 from ..extensions import db
+from uuid import UUID
 
 orders_bp = Blueprint('orders', __name__)
 
 @orders_bp.route('/<int:order_id>/cancel', methods=['PATCH'])
 @jwt_required()
 def cancel_order(order_id):
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
     order = Order.query.filter_by(id=order_id, user_id=user_id).first_or_404()
 
     if order.status.lower() != 'pending':
@@ -22,7 +23,7 @@ def cancel_order(order_id):
 @orders_bp.route('/my-orders', methods=['GET'])
 @jwt_required()
 def get_user_orders():
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
 
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)

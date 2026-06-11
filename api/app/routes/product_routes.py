@@ -7,6 +7,7 @@ from ..models.user import User
 from sqlalchemy.orm.attributes import flag_modified
 import json
 from werkzeug.utils import secure_filename
+from uuid import UUID
 
 product_bp = Blueprint("products", __name__)
 
@@ -76,7 +77,8 @@ def add_product():
 @product_bp.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
 def delete_product(id):
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
+    
     user = User.query.get(int(user_id))
 
     if user.role != 'admin':
@@ -91,7 +93,7 @@ def delete_product(id):
 @product_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_product(id):
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
     user = User.query.get(int(user_id))
 
     if not user or user.role != 'admin':

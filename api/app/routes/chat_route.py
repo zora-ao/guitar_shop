@@ -4,13 +4,14 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.messages import Message
 from ..models.user import User
 from ..extensions import db
+from uuid import UUID
 
 chat_bp = Blueprint('chat', __name__)
 
 @chat_bp.route("/contacts", methods=['GET'])
 @jwt_required()
 def get_contacts_with_previews():
-    current_user_id = int(get_jwt_identity())
+    current_user_id = UUID(get_jwt_identity())
 
     # This finds the last message ID for every conversation the user is part of
     last_message_subquery = db.session.query(
@@ -43,7 +44,7 @@ def get_contacts_with_previews():
 @chat_bp.route("/history/<int:other_user_id>", methods=['GET'])
 @jwt_required()
 def get_chat_history(other_user_id):
-    current_user_id = int(get_jwt_identity())
+    current_user_id = UUID(get_jwt_identity())
 
     messages = Message.query.filter(
         ((Message.sender_id == current_user_id) & (Message.receiver_id == other_user_id)) |
@@ -56,7 +57,7 @@ def get_chat_history(other_user_id):
 @jwt_required()
 def send_messages():
     try:
-        current_user_id = int(get_jwt_identity())
+        current_user_id = UUID(get_jwt_identity())
         data = request.get_json()
 
         # 1. Validate data existence

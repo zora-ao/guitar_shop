@@ -3,13 +3,14 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from ..models.cart import CartItem
 from ..models.product import Product
 from ..extensions import db
+from uuid import UUID
 
 cart_bp = Blueprint("cart", __name__)
 
 @cart_bp.route("/update/<int:item_id>", methods=['PUT'])
 @jwt_required()
 def update_cart_item(item_id):
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
     data = request.get_json()
     new_quantity = data.get('quantity')
 
@@ -38,7 +39,7 @@ def update_cart_item(item_id):
 @cart_bp.route("/delete/<int:item_id>", methods=['DELETE'])
 @jwt_required()
 def delete_cart_item(item_id):
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
 
     item = CartItem.query.filter_by(id=item_id, user_id=user_id).first()
 
@@ -53,7 +54,7 @@ def delete_cart_item(item_id):
 @cart_bp.route("/add", methods=['POST'])
 @jwt_required()
 def add_to_cart():
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
     data = request.get_json()
 
     product_id = data.get('product_id')
@@ -100,7 +101,7 @@ def add_to_cart():
 @cart_bp.route("/sync", methods=['POST'])
 @jwt_required()
 def sync_cart():
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
     data = request.get_json()
 
     if not data or not isinstance(data, list):
@@ -135,7 +136,7 @@ def sync_cart():
 @cart_bp.route('/', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_cart():
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
     cart_items = CartItem.query.filter_by(user_id=user_id).all()
 
     output = []

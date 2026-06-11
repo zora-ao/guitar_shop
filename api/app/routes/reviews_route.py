@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..extensions import db
 from ..models.product import Product
 from ..models.review import Review
+from uuid import UUID
 
 review_bp = Blueprint('review_bp', __name__)
 
@@ -46,7 +47,7 @@ def get_review_stats(product_id):
 @review_bp.route('/<int:product_id>', methods=['POST'])
 @jwt_required()
 def add_review(product_id):
-    user_id = get_jwt_identity() 
+    user_id = UUID(get_jwt_identity()) 
     data = request.get_json()
 
     if not data.get('rating') or not (1 <= data['rating'] <= 5):

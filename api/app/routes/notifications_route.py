@@ -2,13 +2,14 @@ from flask import Blueprint, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..models.notification import Notification
 from ..extensions import db
+from uuid import UUID
 
 notifications_bp = Blueprint('notifications', __name__)
 
 @notifications_bp.route('/get_notif', methods=['GET'])
 @jwt_required()
 def get_user_notifications():
-    user_id = get_jwt_identity()
+    user_id = UUID(get_jwt_identity())
     notifications = Notification.query.filter_by(user_id=user_id).order_by(Notification.created_at.desc()).all()
     return jsonify([n.to_dict() for n in notifications]), 200
 
