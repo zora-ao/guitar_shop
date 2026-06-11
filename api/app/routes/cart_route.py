@@ -58,16 +58,16 @@ def add_to_cart():
     data = request.get_json()
 
     product_id = data.get('product_id')
-    quantity = data.get('quantity', 1)
+    quantity = int(data.get('quantity', 1))
 
     if not product_id:
         return jsonify({"error": "Product ID is required"}), 400
-    
-    product = db.session.get(Product, product_id)
+
+    product = db.session.get(Product, int(product_id))
     if not product:
         return jsonify({"error": "Product not found"}), 404
-    
-    item = CartItem.query.filter_by(user_id=user_id, product_id=product_id).first()
+
+    item = CartItem.query.filter_by(user_id=user_id, product_id=product.id).first()
 
     if item:
         new_qty = item.quantity + quantity
@@ -76,10 +76,11 @@ def add_to_cart():
         initial_qty = min(quantity, product.stock)
         item = CartItem(
             user_id=user_id,
-            product_id=product_id,
+            product_id=product.id,
             quantity=initial_qty
         )
         db.session.add(item)
+
     db.session.commit()
 
     return jsonify({
@@ -96,7 +97,6 @@ def add_to_cart():
             }
         }
     }), 201
-
 
 @cart_bp.route("/sync", methods=['POST'])
 @jwt_required()
