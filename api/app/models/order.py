@@ -1,11 +1,14 @@
 from ..extensions import db
 from datetime import datetime, timezone
+from sqlalchemy.dialects.postgresql import UUID
 
 class Order(db.Model):
     __tablename__ = 'orders'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    
+    # Changed from db.Integer to UUID(as_uuid=True) to match the users table
+    user_id = db.Column(UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
     
     # Customer Details at time of order
     first_name = db.Column(db.String(50), nullable=False)
@@ -34,8 +37,13 @@ class OrderItem(db.Model):
     __tablename__ = 'order_items'
 
     id = db.Column(db.Integer, primary_key=True)
+    
+    # Kept as Integer because Order.id is still an Integer
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
+    
+    # Kept as Integer because Product.id is still an Integer
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    
     quantity = db.Column(db.Integer, nullable=False)
     price_at_purchase = db.Column(db.Float, nullable=False)
 
