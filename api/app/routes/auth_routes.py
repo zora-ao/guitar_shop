@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from ..models.user import User
 from ..extensions import db
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_access_cookies, jwt_required, get_jwt_identity
+from uuid import UUID
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -78,7 +79,7 @@ def logout():
 @jwt_required()
 def get_me():
     try:
-        user_id = get_jwt_identity()
+        user_id = UUID(get_jwt_identity())
         user = User.query.get(user_id)
 
         if not user:
