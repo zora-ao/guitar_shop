@@ -55,15 +55,22 @@ def delete_cart_item(item_id):
 @jwt_required()
 def add_to_cart():
     user_id = UUID(get_jwt_identity())
-    data = request.get_json()
+
+    data = request.get_json(silent=True)  # returns None instead of raising on bad content-type
+    if not data:
+        return jsonify({"error": "Request body must be valid JSON"}), 400
 
     product_id = data.get('product_id')
-    quantity = int(data.get('quantity', 1))
-
     if not product_id:
         return jsonify({"error": "Product ID is required"}), 400
 
-    product = db.session.get(Product, int(product_id))
+    try:
+        product_id = int(product_id)
+        quantity = int(data.get('quantity', 1))
+    except (ValueError, TypeError):
+        return jsonify({"error": "Invalid product_id or quantity"}), 400
+
+    product = db.session.get(Product, product_id)
     if not product:
         return jsonify({"error": "Product not found"}), 404
 

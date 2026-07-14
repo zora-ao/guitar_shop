@@ -43,14 +43,17 @@ def get_review_stats(product_id):
         "distribution": distribution
     })
 
-# --- POST A NEW REVIEW ---
 @review_bp.route('/<int:product_id>', methods=['POST'])
 @jwt_required()
 def add_review(product_id):
-    user_id = UUID(get_jwt_identity()) 
-    data = request.get_json()
+    user_id = UUID(get_jwt_identity())
 
-    if not data.get('rating') or not (1 <= data['rating'] <= 5):
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"msg": "Request body must be valid JSON"}), 400
+
+    rating = data.get('rating')
+    if rating is None or not isinstance(rating, (int, float)) or not (1 <= rating <= 5):
         return jsonify({"msg": "Rating between 1 and 5 is required"}), 400
 
     product = Product.query.get_or_404(product_id)
@@ -60,7 +63,7 @@ def add_review(product_id):
         return jsonify({"msg": "You have already reviewed this product"}), 400
 
     new_review = Review(
-        rating=data['rating'],
+        rating=rating,
         comment=data.get('comment', ""),
         user_id=user_id,
         product_id=product_id

@@ -31,9 +31,12 @@ def get_contacts_with_previews():
         # Determine which user in the message is the 'other' person
         other_user_id = msg.receiver_id if msg.sender_id == current_user_id else msg.sender_id
         other_user = User.query.get(other_user_id)
-        
+
+        if not other_user:
+            continue
+
         results.append({
-            "id": other_user.id,
+            "id": str(other_user.id),
             "username": other_user.username,
             "last_message": msg.content,
             "last_message_time": msg.created_at.isoformat()
@@ -41,14 +44,19 @@ def get_contacts_with_previews():
 
     return jsonify(results), 200
 
-@chat_bp.route("/history/<int:other_user_id>", methods=['GET'])
+@chat_bp.route("/history/<string:other_user_id>", methods=['GET'])
 @jwt_required()
 def get_chat_history(other_user_id):
     current_user_id = UUID(get_jwt_identity())
 
+    try:
+        other_user_id = UUID(other_user_id)
+    except (ValueError, AttributeError):
+        return jsonify({"error": "Invalid user ID format"}), 400
+
     messages = Message.query.filter(
         ((Message.sender_id == current_user_id) & (Message.receiver_id == other_user_id)) |
-        ((Message.sender_id == other_user_id) & (Message.receiver_id == current_user_id)    )
+        ((Message.sender_id == other_user_id) & (Message.receiver_id == current_user_id))
     ).order_by(Message.created_at.asc()).all()
 
     return jsonify([m.to_dict() for m in messages]), 200
@@ -58,7 +66,10 @@ def get_chat_history(other_user_id):
 def send_messages():
     try:
         current_user_id = UUID(get_jwt_identity())
-        data = request.get_json()
+
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"error": "Request body must be valid JSON"}), 400
 
         # 1. Validate data existence
         rid = data.get('receiver_id')
@@ -67,21 +78,21 @@ def send_messages():
         if rid is None or not msg_content:
             return jsonify({"error": "Receiver ID or Content is missing"}), 400
 
-        # 2. Force integer conversion to satisfy ForeignKey constraints
+        # 2. receiver_id is a UUID, not an integer — parse accordingly
         new_msg = Message(
             sender_id=current_user_id,
-            receiver_id=int(rid),
+            receiver_id=UUID(str(rid)),
             content=str(msg_content)
         )
 
         db.session.add(new_msg)
         db.session.commit()
-        
+
         return jsonify(new_msg.to_dict()), 201
 
     except ValueError:
         return jsonify({"error": "Invalid Receiver ID format"}), 400
     except Exception as e:
         db.session.rollback()
-        print(f"DATABASE ERROR: {e}") # Check your terminal for this!
+        print(f"DATABASE ERROR: {e}")  # Check your terminal for this!
         return jsonify({"error": "Internal Server Error"}), 500
