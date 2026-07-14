@@ -4,6 +4,7 @@ from ..extensions import db
 from ..models.product import Product
 from ..models.review import Review
 from uuid import UUID
+from ..utils.auth_helpers import get_current_user_or_401
 
 review_bp = Blueprint('review_bp', __name__)
 
@@ -43,9 +44,39 @@ def get_review_stats(product_id):
         "distribution": distribution
     })
 
+
 @review_bp.route('/<int:product_id>', methods=['POST'])
 @jwt_required()
 def add_review(product_id):
+    user, error_response = get_current_user_or_401()
+    if error_response:
+        return error_response
+
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"msg": "Request body must be valid JSON"}), 400
+
+    rating = data.get('rating')
+    if rating is None or not isinstance(rating, (int, float)) or not (1 <= rating <= 5):
+        return jsonify({"msg": "Rating between 1 and 5 is required"}), 400
+
+    product = Product.query.get_or_404(product_id)
+
+    existing_review = Review.query.filter_by(user_id=user.id, product_id=product_id).first()
+    if existing_review:
+        return jsonify({"msg": "You have already reviewed this product"}), 400
+
+    new_review = Review(
+        rating=rating,
+        comment=data.get('comment', ""),
+        user_id=user.id,
+        product_id=product_id
+    )
+
+    db.session.add(new_review)
+    db.session.commit()
+
+    return jsonify({"msg": "Review added successfully", "review": new_review.to_dict()}), 201
     user_id = UUID(get_jwt_identity())
 
     data = request.get_json(silent=True)

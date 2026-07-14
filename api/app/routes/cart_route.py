@@ -3,6 +3,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from ..models.cart import CartItem
 from ..models.product import Product
 from ..extensions import db
+from ..models.user import User
 from uuid import UUID
 
 cart_bp = Blueprint("cart", __name__)
@@ -56,7 +57,14 @@ def delete_cart_item(item_id):
 def add_to_cart():
     user_id = UUID(get_jwt_identity())
 
-    data = request.get_json(silent=True)  # returns None instead of raising on bad content-type
+    # Guard against stale/orphaned tokens referencing a user that no longer
+    # exists in the DB (e.g. after a DB reset). Without this, the INSERT
+    # below throws an unhandled ForeignKeyViolation -> 500.
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({"error": "Session invalid, please log in again"}), 401
+
+    data = request.get_json(silent=True)
     if not data:
         return jsonify({"error": "Request body must be valid JSON"}), 400
 
