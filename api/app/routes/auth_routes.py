@@ -50,6 +50,8 @@ def login():
     password = data.get("password")
     user = User.query.filter_by(email=email).first()
 
+    print(f"LOGIN DB CHECK: user={user.id if user else None} | engine={db.engine.url}")
+
     if not user or not user.check_password(password):
         return jsonify({"error": "Invalid Credentials"}), 401
     

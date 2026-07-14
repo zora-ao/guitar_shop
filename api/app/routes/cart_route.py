@@ -57,6 +57,8 @@ def delete_cart_item(item_id):
 def add_to_cart():
     user_id = UUID(get_jwt_identity())
 
+    print(f"CART DB CHECK: user_id={user_id} | engine={db.engine.url}")
+
     # Guard against stale/orphaned tokens referencing a user that no longer
     # exists in the DB (e.g. after a DB reset). Without this, the INSERT
     # below throws an unhandled ForeignKeyViolation -> 500.
