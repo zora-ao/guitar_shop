@@ -74,14 +74,27 @@ def add_product():
         return jsonify({"error": "Internal Server Error", "details": str(e)}), 500
 
 
+def get_current_user():
+    """
+    Resolve the JWT identity into a User, safely.
+    Returns None if the token identity is missing/invalid or no matching user exists.
+    """
+    identity = get_jwt_identity()
+    if not identity:
+        return None
+    try:
+        user_id = UUID(identity)
+    except (ValueError, AttributeError, TypeError):
+        return None
+    return User.query.get(user_id)
+
+
 @product_bp.route("/<int:id>", methods=["DELETE"])
 @jwt_required()
 def delete_product(id):
-    user_id = UUID(get_jwt_identity())
-    
-    user = User.query.get(int(user_id))
+    user = get_current_user()
 
-    if user.role != 'admin':
+    if not user or user.role != 'admin':
         return jsonify({"error": "Admin only"}), 403
 
     product = Product.query.get_or_404(id)
@@ -93,8 +106,7 @@ def delete_product(id):
 @product_bp.route('/<int:id>', methods=['PUT'])
 @jwt_required()
 def update_product(id):
-    user_id = UUID(get_jwt_identity())
-    user = User.query.get(int(user_id))
+    user = get_current_user()
 
     if not user or user.role != 'admin':
         return jsonify({"error": "Admin access required"}), 403

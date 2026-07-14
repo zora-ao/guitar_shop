@@ -1,11 +1,12 @@
 // src/utils/api.ts
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5173";
+const defaultOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || defaultOrigin;
 
 export const getApiUrl = (endpoint: string) => {
     // If the variable is missing, this will log a clear error in your browser F12 console
     if (!API_BASE_URL) {
         console.error("CRITICAL: VITE_API_BASE_URL is missing. Check Vercel Dashboard.");
-        return `/error-missing-config/api/${endpoint}`; 
+        return `/error-missing-config/api/${endpoint}`;
     }
 
     const cleanBase = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;

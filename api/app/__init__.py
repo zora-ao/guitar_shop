@@ -52,13 +52,16 @@ def create_app():
 
     jwt.init_app(app)
 
+    frontend_url = os.getenv("FRONTEND_URL", "https://guitars-shop.vercel.app")
+    allowed_origins = [
+        "http://localhost:5173",
+        frontend_url
+    ]
+
     CORS(
         app,
-        supports_credentials=True,  
-        origins=[
-            "http://localhost:5173",
-            "https://guitars-shop.vercel.app"
-            ],
+        supports_credentials=True,
+        origins=allowed_origins,
         methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     )
 

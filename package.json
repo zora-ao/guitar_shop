@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \".\\api\\venv\\Scripts\\python.exe api/index.py\"",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "build": "tsc -b && vite build",    "vercel-build": "npm run build",    "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
